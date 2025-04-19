@@ -60,10 +60,10 @@ def webhook():
     print("Incomming webhook notification is",received_payload)
     person_id=received_payload.get("data",{}).get("personId")
     person_email=received_payload.get("data",{}).get("personEmail")
+    print(person_email)
     message_id=received_payload.get("data",{}).get("id")
     if message_id:
         text=get_message_from_id(message_id)
-        print(text)
         print(type(text))
     else:
         print("sorry, No message ID found in the webhook")
