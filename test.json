@@ -1,0 +1,59 @@
+reply from bot for the get_message_from_id is 200 {
+  "id": "Y2lzY29zcGFyazovL3VzL01FU1NBR0UvNGZhMzNiZDAtMWNlZC0xMWYwLTlhZWUtZWQyNWQyYWQyOWIy",
+  "roomId": "Y2lzY29zcGFyazovL3VzL1JPT00vZTA0MTM0ZjAtMWFlOC0xMWYwLWE4ZDUtZjUwMmZjZDFiZGFh",
+  "roomType": "direct",
+  "text": "Test Adaptive Card to User",
+  "attachments": [
+    {
+      "contentType": "application/vnd.microsoft.card.adaptive",
+      "content": {
+        "type": "AdaptiveCard",
+        "version": "1.2",
+        "body": [
+          {
+            "type": "TextBlock",
+            "text": "\uD83C\uDF10 Select a global variable to update",
+            "weight": "Bolder",
+            "size": "Large",
+            "wrap": true
+          },
+          {
+            "type": "Input.ChoiceSet",
+            "id": "global_var",
+            "style": "compact",
+            "choices": [
+              {
+                "title": "variable1",
+                "value": "variable1"
+              },
+              {
+                "title": "variable2",
+                "value": "variable2"
+              },
+              {
+                "title": "tts prompt",
+                "value": "tts_prompt"
+              }
+            ],
+            "isRequired": true,
+            "placeholder": "Choose one..."
+          }
+        ],
+        "actions": [
+          {
+            "type": "Action.Submit",
+            "title": "Next",
+            "data": {
+              "action": "select_global"
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "personId": "Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jODI5NTY3NS0zYTk2LTQ0ZGQtODBiMC1hYWMzM2MwYmZiOTA",
+  "personEmail": "Wxcc_testing@webex.bot",
+  "markdown": "**Test Adaptive Card to User**",
+  "html": "<p><strong>Test Adaptive Card to User</strong></p>",
+  "created": "2025-04-19T07:10:01.741Z"
+}

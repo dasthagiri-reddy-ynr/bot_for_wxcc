@@ -57,6 +57,7 @@ def wxcc_global_variable_list():
 @app.route('/webhook', methods=['POST'])
 def webhook():
     received_payload=request.json
+    print("Incomming webhook notification is",received_payload)
     person_id=received_payload.get("data",{}).get("personId")
     person_email=received_payload.get("data",{}).get("personEmail")
     message_id=received_payload.get("data",{}).get("id")

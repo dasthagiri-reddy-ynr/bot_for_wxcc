@@ -1,0 +1,10 @@
+main idea:
+To provide Bot for Supervisors where they can perform multiple actions.
+
+First implementation:
+update global variables from the bot.
+
+
+me:tts prompt 
+bot: Current Value at tts prompt is : 
+
