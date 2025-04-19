@@ -1,5 +1,28 @@
+Incomming webhook notification is {
+  "id": "Y2lzY29zcGFyazovL3VzL1dFQkhPT0svYTQyM2Q0Y2MtYTcxMi00ZTc2LWE1ZTItNzhhMjkzNzIwYTBl",
+  "name": "render webhook",
+  "targetUrl": "https://bot-for-wxcc.onrender.com/webhook",
+  "resource": "messages",
+  "event": "created",
+  "orgId": "Y2lzY29zcGFyazovL3VzL09SR0FOSVpBVElPTi9mOWI0ZmE5ZS0xZTgyLTRjYWYtOGJlNi05MmI4MDExY2MxYWE",
+  "createdBy": "Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jODI5NTY3NS0zYTk2LTQ0ZGQtODBiMC1hYWMzM2MwYmZiOTA",
+  "appId": "Y2lzY29zcGFyazovL3VzL0FQUExJQ0FUSU9OL0MzMmM4MDc3NDBjNmU3ZGYxMWRhZjE2ZjIyOGRmNjI4YmJjYTQ5YmE1MmZlY2JiMmM3ZDUxNWNiNGEwY2M5MWFh",
+  "ownedBy": "creator",
+  "status": "active",
+  "created": "2025-04-18T18:00:52.818Z",
+  "actorId": "Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jODI5NTY3NS0zYTk2LTQ0ZGQtODBiMC1hYWMzM2MwYmZiOTA",
+  "data": {
+    "id": "Y2lzY29zcGFyazovL3VzL01FU1NBR0UvNWM1ZTFmYzAtMWQxMC0xMWYwLWEwZDktZGJjZmZiMWM3NTE4",
+    "roomId": "Y2lzY29zcGFyazovL3VzL1JPT00vZTA0MTM0ZjAtMWFlOC0xMWYwLWE4ZDUtZjUwMmZjZDFiZGFh",
+    "roomType": "direct",
+    "personId": "Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jODI5NTY3NS0zYTk2LTQ0ZGQtODBiMC1hYWMzM2MwYmZiOTA",
+    "personEmail": "Wxcc_testing@webex.bot",
+    "created": "2025-04-19T11:20:55.484Z"
+  }
+}
+
 reply from bot for the get_message_from_id is 200 {
-  "id": "Y2lzY29zcGFyazovL3VzL01FU1NBR0UvNGZhMzNiZDAtMWNlZC0xMWYwLTlhZWUtZWQyNWQyYWQyOWIy",
+  "id": "Y2lzY29zcGFyazovL3VzL01FU1NBR0UvNWM1ZTFmYzAtMWQxMC0xMWYwLWEwZDktZGJjZmZiMWM3NTE4",
   "roomId": "Y2lzY29zcGFyazovL3VzL1JPT00vZTA0MTM0ZjAtMWFlOC0xMWYwLWE4ZDUtZjUwMmZjZDFiZGFh",
   "roomType": "direct",
   "text": "Test Adaptive Card to User",
@@ -55,5 +78,45 @@ reply from bot for the get_message_from_id is 200 {
   "personEmail": "Wxcc_testing@webex.bot",
   "markdown": "**Test Adaptive Card to User**",
   "html": "<p><strong>Test Adaptive Card to User</strong></p>",
-  "created": "2025-04-19T07:10:01.741Z"
+  "created": "2025-04-19T11:20:55.484Z"
+}
+
+
+Card Submission notification to webex {
+  "id": "Y2lzY29zcGFyazovL3VzL1dFQkhPT0svYzQ3MmRlZjMtZWMzNy00OWFlLWIxZmEtMmJiODlhZTg4MzY4",
+  "name": "wxcc bot attachment Webhook",
+  "targetUrl": "https://bot-for-wxcc.onrender.com/webhook",
+  "resource": "attachmentActions",
+  "event": "created",
+  "orgId": "Y2lzY29zcGFyazovL3VzL09SR0FOSVpBVElPTi9mOWI0ZmE5ZS0xZTgyLTRjYWYtOGJlNi05MmI4MDExY2MxYWE",
+  "createdBy": "Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jODI5NTY3NS0zYTk2LTQ0ZGQtODBiMC1hYWMzM2MwYmZiOTA",
+  "appId": "Y2lzY29zcGFyazovL3VzL0FQUExJQ0FUSU9OL0MzMmM4MDc3NDBjNmU3ZGYxMWRhZjE2ZjIyOGRmNjI4YmJjYTQ5YmE1MmZlY2JiMmM3ZDUxNWNiNGEwY2M5MWFh",
+  "ownedBy": "creator",
+  "status": "active",
+  "created": "2025-04-19T11:18:17.767Z",
+  "actorId": "Y2lzY29zcGFyazovL3VzL1BFT1BMRS84ZDRiYjQ0Zi0wMDVjLTRlMjctYTJkZC01ZDg5Y2VhN2Q2OGU",
+  "data": {
+    "id": "Y2lzY29zcGFyazovL3VzL0FUVEFDSE1FTlRfQUNUSU9OLzkzMTYyNjcwLTFkMTAtMTFmMC1hNWY4LWQzZTViMzI0ZDVhMw",
+    "type": "submit",
+    "messageId": "Y2lzY29zcGFyazovL3VzL01FU1NBR0UvNWM1ZTFmYzAtMWQxMC0xMWYwLWEwZDktZGJjZmZiMWM3NTE4",
+    "personId": "Y2lzY29zcGFyazovL3VzL1BFT1BMRS84ZDRiYjQ0Zi0wMDVjLTRlMjctYTJkZC01ZDg5Y2VhN2Q2OGU",
+    "roomId": "Y2lzY29zcGFyazovL3VzL1JPT00vZTA0MTM0ZjAtMWFlOC0xMWYwLWE4ZDUtZjUwMmZjZDFiZGFh",
+    "created": "2025-04-19T11:22:27.287Z"
+  }
+}
+
+
+orginal details from the card submitted:
+
+{
+  "id": "Y2lzY29zcGFyazovL3VzL0FUVEFDSE1FTlRfQUNUSU9OLzkzMTYyNjcwLTFkMTAtMTFmMC1hNWY4LWQzZTViMzI0ZDVhMw",
+  "type": "submit",
+  "messageId": "Y2lzY29zcGFyazovL3VzL01FU1NBR0UvNWM1ZTFmYzAtMWQxMC0xMWYwLWEwZDktZGJjZmZiMWM3NTE4",
+  "inputs": {
+      "action": "select_global",
+      "global_var": "tts_prompt"
+  },
+  "personId": "Y2lzY29zcGFyazovL3VzL1BFT1BMRS84ZDRiYjQ0Zi0wMDVjLTRlMjctYTJkZC01ZDg5Y2VhN2Q2OGU",
+  "roomId": "Y2lzY29zcGFyazovL3VzL1JPT00vZTA0MTM0ZjAtMWFlOC0xMWYwLWE4ZDUtZjUwMmZjZDFiZGFh",
+  "created": "2025-04-19T11:22:27.287Z"
 }

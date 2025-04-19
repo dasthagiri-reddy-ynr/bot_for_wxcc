@@ -5,6 +5,41 @@ First implementation:
 update global variables from the bot.
 
 
+
+ignore the messages from bot logic:
+
+after receiving the webhook notification from bot to the app.
+
+we will get personEmail in the notification itself.
+
+if the notification contains @webex.bot ignore the message.
+
 me:tts prompt 
 bot: Current Value at tts prompt is : 
 
+me : Hi 
+bot : Hello welcome to the wxcc supervisor bot.
+      please select an option to start
+      <List of options>
+      Next button
+
+me: select an option(Global Variable List)
+
+Bot: Operation regarding the(List of Global Variable) and Next button.
+
+Bot: shows the tts_script and its default value and next button.
+
+bot: text box to enter the value for tts_script and update button.
+
+bot: message with status.
+
+
+differentiate between a incomming message and to the bot and a selction in the card.
+
+
+
+sequence:
+
+msg from user 1st msg notification
+reply from bot with card 2nd attachment notification and 3rd notification as msg
+submit the card 3rd notification

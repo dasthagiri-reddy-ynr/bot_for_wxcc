@@ -64,6 +64,7 @@ def webhook():
     person_email=received_payload.get("data",{}).get("personEmail")
     print(person_email)
     print(person_id)
+    return "webhook received",200
 '''
     message_id=received_payload.get("data",{}).get("id")
     if person_id is None or bot_person_id in person_id:
@@ -86,7 +87,6 @@ def webhook():
             message_text='Hello , currently I support only updating the global variable. If you want to update the global variable enter "List_global_variables" to see the available global variables.'
             response=send_webex_message(person_id,message_text)
 '''
-    return "webhook received",200
 
 # --- Optional: Index Route ---
 @app.route('/')
