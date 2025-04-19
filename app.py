@@ -7,6 +7,7 @@ app = Flask(__name__)
 WEBEX_BOT_TOKEN = 'Bearer MTM3OTkxYWUtNzgwYS00MDg1LWE2ZTktZDAzMzkzYTk1NGY0YzM2MDAyNjQtZjU1_PF84_f9b4fa9e-1e82-4caf-8be6-92b8011cc1aa'  # Replace with your real token
 wxcc_token='Bearer NzM3M2UwZjUtNTMzOS00NGVmLWE4YzktOGE5ZjI0MjRiNjFjMGFkMWU0OGYtZjFh_PF84_f9b4fa9e-1e82-4caf-8be6-92b8011cc1aa'  # Replace with your real token
 org_id='f9b4fa9e-1e82-4caf-8be6-92b8011cc1aa' # enter correct org_id
+bot_email = "@webex.bot"
 
 # --- Webex Send Message Function ---
 def send_webex_message(person_id, text):
@@ -62,22 +63,25 @@ def webhook():
     person_email=received_payload.get("data",{}).get("personEmail")
     print(person_email)
     message_id=received_payload.get("data",{}).get("id")
-    if message_id:
-        text=get_message_from_id(message_id)
-        print(type(text))
+    if person_email is None or bot_email in person_email:
+        print("ignoring bot message webhook notifications")
     else:
-        print("sorry, No message ID found in the webhook")
-    if text.strip().strip('"') == "List_global_variables":
-        Global_Variable_list=wxcc_global_variable_list()
-        add_text="enter the global variable you want to update"
-        message_text="\n".join(Global_Variable_list) + "\n\n" + add_text
-        if person_id:                                                         # executes only if person id is not null or empty string..
-            send_webex_message(person_id, message_text)
+        if message_id:
+            text=get_message_from_id(message_id)
+            print(type(text))
         else:
-            print("sorry, No Person ID found in the webhook")
-    else:
-        message_text='Hello , currently I support only updating the global variable. If you want to update the global variable enter "List_global_variables" to see the available global variables.'
-        response=send_webex_message(person_id,message_text)
+            print("sorry, No message ID found in the webhook")
+        if text.strip().strip('"') == "List_global_variables":
+            Global_Variable_list=wxcc_global_variable_list()
+            add_text="enter the global variable you want to update"
+            message_text="\n".join(Global_Variable_list) + "\n\n" + add_text
+            if person_id:                                                         # executes only if person id is not null or empty string..
+                send_webex_message(person_id, message_text)
+            else:
+                print("sorry, No Person ID found in the webhook")
+        else:
+            message_text='Hello , currently I support only updating the global variable. If you want to update the global variable enter "List_global_variables" to see the available global variables.'
+            response=send_webex_message(person_id,message_text)
     return "webhook received",200
 
 # --- Optional: Index Route ---
