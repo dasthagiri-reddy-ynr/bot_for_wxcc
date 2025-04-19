@@ -67,13 +67,9 @@ def webhook():
     else:
         print("sorry, No message ID found in the webhook")
     if text.strip().strip('"') == "List_global_variables":
-        print("message after entering the if statement",text)
         Global_Variable_list=wxcc_global_variable_list()
-        print(type(Global_Variable_list))
-        print(Global_Variable_list)
         add_text="enter the global variable you want to update"
         message_text="\n".join(Global_Variable_list) + "\n\n" + add_text
-        print(message_text)
         if person_id:                                                         # executes only if person id is not null or empty string..
             send_webex_message(person_id, message_text)
         else:
