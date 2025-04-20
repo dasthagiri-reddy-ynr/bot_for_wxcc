@@ -55,11 +55,11 @@ def wxcc_global_variable_list():
         print("Error fetching global variable list:", str(e))
         return ["Error getting data",e]
 
-# --- Webhook Endpoint ---
+# --- Message Webhook Endpoint ---
 @app.route('/webhook', methods=['POST'])
 def webhook():
     received_payload=request.json
-    print("Incomming webhook notification is",received_payload)
+    print("Incoming notification for message webhook is",received_payload)
     person_id=received_payload.get("data",{}).get("personId")
     person_email=received_payload.get("data",{}).get("personEmail")
     print(person_email)
@@ -87,6 +87,12 @@ def webhook():
             message_text='Hello , currently I support only updating the global variable. If you want to update the global variable enter "List_global_variables" to see the available global variables.'
             response=send_webex_message(person_id,message_text)
 '''
+# --- Attachment webhook notification ---
+@app.route('/attachnotify', methods=['POST'])
+def attachnotify():
+    received_payload=request.json
+    print("webex attachment webhook card submit receivedwith data:",received_payload)
+    return "webhook received",200
 
 # --- Optional: Index Route ---
 @app.route('/')
