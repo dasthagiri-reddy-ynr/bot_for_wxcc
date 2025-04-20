@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import requests
+import json
 
 app = Flask(__name__)
 
@@ -9,6 +10,27 @@ wxcc_token='Bearer NzM3M2UwZjUtNTMzOS00NGVmLWE4YzktOGE5ZjI0MjRiNjFjMGFkMWU0OGYtZ
 org_id='f9b4fa9e-1e82-4caf-8be6-92b8011cc1aa' # enter correct org_id
 bot_email = "@webex.bot"
 bot_person_id='Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jODI5NTY3NS0zYTk2LTQ0ZGQtODBiMC1hYWMzM2MwYmZiOTA'
+
+# --- Json content from json file ---
+def json_to_code():
+  with open(first_card.json,"r") as f:
+    return json.load(f)
+
+# --- Send first card to user ---
+def card_to_bot(card_person_id,token):
+  url='https://webexapis.com/v1/messages'
+  headers={
+    "Authorization": token,
+    "Content-Type": "application/json"
+  }
+  card_content=json_to_code()
+  payload={
+    "toPersonId": card_person_id,
+  "markdown": "**Test Adaptive Card to User**",
+  "attachments": [card_content]
+  }
+  response=requests.post(url,headers=headers,json=payload)
+  return response.status_code
 
 # --- Webex Send Message Function ---
 def send_webex_message(person_id, text):
@@ -64,12 +86,14 @@ def webhook():
     person_email=received_payload.get("data",{}).get("personEmail")
     print(person_email)
     print(person_id)
-    return "webhook received",200
-'''
     message_id=received_payload.get("data",{}).get("id")
-    if person_id is None or bot_person_id in person_id:
+    if bot_person_id in person_id:
         print("ignoring bot message webhook notifications")
     else:
+        json_file=first_card.json
+        card_to_bot(card_person_id=person_id,token=WEBEX_BOT_TOKEN)
+    return "webhook received",200
+'''
         if message_id:
             text=get_message_from_id(message_id)
             print(type(text))
