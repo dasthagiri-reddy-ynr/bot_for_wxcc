@@ -13,7 +13,7 @@ bot_person_id='Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jODI5NTY3NS0zYTk2LTQ0ZGQtODBiMC1hY
 
 # --- Json content from json file ---
 def json_to_code():
-  with open(first_card.json,"r") as f:
+  with open("first_card.json","r") as f:
     return json.load(f)
 
 # --- Send first card to user ---
@@ -90,7 +90,7 @@ def webhook():
     if bot_person_id in person_id:
         print("ignoring bot message webhook notifications")
     else:
-        json_file=first_card.json
+        json_file="first_card.json"
         card_to_bot(card_person_id=person_id,token=WEBEX_BOT_TOKEN)
     return "webhook received",200
 '''
