@@ -19,7 +19,7 @@
           },
           {
             "type": "Input.ChoiceSet",
-            "id": "Select_Option",
+            "id": "Select_option",
             "style": "compact",
             "choices": [
               {
@@ -48,7 +48,7 @@
             "type": "Action.Submit",
             "title": "Next",
             "data": {
-              "action": "Select_Option"
+              "action": "Select_option"
             }
           }
         ]
