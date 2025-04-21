@@ -173,7 +173,7 @@ def attachnotify():
             base_card = json.load(f)
         send_card=copy.deepcopy(base_card)
         print(f'send card after cpying the basecard {send_card}')
-        send_card["body"][0]["choices"] = next_card_choices
+        send_card["body"][2]["choices"] = next_card_choices
         send_card["body"][0]["text"] = "🗣️ Welcome to Prompt Admin 🗣️"
         send_card["body"][1]["text"] = "👉 Select a Global Variable"
         print(f'send card after entering the details {send_card}')
