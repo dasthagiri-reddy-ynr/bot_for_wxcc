@@ -126,24 +126,6 @@ def webhook():
         first_card=load_card_from_file(json_file=json_file)
         card_to_bot(card_person_id=person_id,token=WEBEX_BOT_TOKEN,card_content=first_card)
     return "webhook received",200
-'''
-        if message_id:
-            text=get_message_from_id(message_id)
-            print(type(text))
-        else:
-            print("sorry, No message ID found in the webhook")
-        if text.strip().strip('"') == "List_global_variables":
-            Global_Variable_list=wxcc_global_variable_list()
-            add_text="enter the global variable you want to update"
-            message_text="\n".join(Global_Variable_list) + "\n\n" + add_text
-            if person_id:                                                         # executes only if person id is not null or empty string..
-                send_webex_message(person_id, message_text)
-            else:
-                print("sorry, No Person ID found in the webhook")
-        else:
-            message_text='Hello , currently I support only updating the global variable. If you want to update the global variable enter "List_global_variables" to see the available global variables.'
-            response=send_webex_message(person_id,message_text)
-'''
 # --- Attachment webhook notification ---
 @app.route('/attachnotify', methods=['POST'])
 def attachnotify():
@@ -155,6 +137,56 @@ def attachnotify():
     card_message_id=card_details_json.get("messageId")
     card_person_id=card_details_json.get("personId")
     print(f'person {card_person_id} selected this option {user_selected_option} and the message id for the card is {card_message_id}')
+# --- New code starts here, if it breaks delete from here ---
+    if user_selected_option in all_features:
+        if user_selected_option in not_enabled_features:
+            message_text=f' 🛠️ {user_selected_option} Feature is still under development 🛠️'
+            send_webex_message(person_id=card_person_id,text=message_text)
+            message_delete_status_code=delete_webex_message(message_id=card_message_id)
+            print(message_delete_status_code)
+            return "webhook received",200
+        else:
+            message_text=f'✅ The option {user_selected_option} is submitted successfully'
+            send_webex_message(person_id=card_person_id,text=message_text)
+            message_delete_status_code=delete_webex_message(message_id=card_message_id)
+            print("Card deleted from webex successfully with code",message_delete_status_code)
+            prompt_admin_list=wxcc_global_variable_list()
+            next_card_choices=choices_for_send_card(choice_list=prompt_admin_list)
+            print(next_card_choices)  
+            json_file="base_card.json"
+            base_card_copy=load_card_from_file(json_file=json_file)
+            second_card=copy.deepcopy(base_card_copy)
+            print(f'send card after copying the basecard {second_card}')
+            second_card["content"]["body"][2]["choices"] = next_card_choices
+            second_card["content"]["body"][0]["text"] = "🗣️ Welcome to Prompt Admin 🗣️"
+            second_card["content"]["body"][1]["text"] = "👉 Select a Global Variable"
+            print(f'send card after entering the details {second_card}')
+            card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=second_card)
+            return "webhook received",200
+    
+    else:
+        global_variable_list=wxcc_global_variable_list()
+        if user_selected_option in global_variable_list:
+            message_text=f'✅ The option {user_selected_option} is submitted successfully'
+            send_webex_message(person_id=card_person_id,text=message_text)
+            message_delete_status_code=delete_webex_message(message_id=card_message_id)
+            print("Card deleted from webex successfully with code",message_delete_status_code)
+            default_value="This is the value stored in the global variable"
+            json_file="base_card.json"
+            base_card_copy=load_card_from_file(json_file=json_file)
+            third_card=copy.deepcopy(base_card_copy)
+            list_for_third_card=['Update','Exit']
+            next_card_choices=choices_for_send_card(choice_list=list_for_third_card)
+            third_card["content"]["body"][2]["choices"] = next_card_choices
+            third_card["content"]["body"][0]["text"] = f"{user_selected_option} default is "
+            third_card["content"]["body"][1]["text"] = f"👉 {default_value} 👈"
+            card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=third_card)
+            return "webhook received",200
+        else:
+            return "webhook received",200
+
+# --- new code ends here, if it breaks delete upto here ---
+    '''
     if user_selected_option in not_enabled_features:
         message_text=f' 🛠️ {user_selected_option} Feature is still under development 🛠️'
         send_webex_message(person_id=card_person_id,text=message_text)
@@ -168,17 +200,7 @@ def attachnotify():
         print("Card deleted from webex successfully with code",message_delete_status_code)
         prompt_admin_list=wxcc_global_variable_list()
         next_card_choices=choices_for_send_card(choice_list=prompt_admin_list)
-        print(next_card_choices)
-        '''
-        with open("base_card.json", "r") as f:
-            base_card = json.load(f)
-        send_card=copy.deepcopy(base_card)
-        print(f'send card after copying the basecard {send_card}')
-        send_card["body"][2]["choices"] = next_card_choices
-        send_card["body"][0]["text"] = "🗣️ Welcome to Prompt Admin 🗣️"
-        send_card["body"][1]["text"] = "👉 Select a Global Variable"
-        print(f'send card after entering the details {send_card}')
-'''     
+        print(next_card_choices)  
         json_file="base_card.json"
         base_card_copy=load_card_from_file(json_file=json_file)
         second_card=copy.deepcopy(base_card_copy)
@@ -189,6 +211,7 @@ def attachnotify():
         print(f'send card after entering the details {second_card}')
         card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=second_card)
         return "webhook received",200
+        '''
 
 # --- Optional: Index Route ---
 @app.route('/')
