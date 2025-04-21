@@ -169,7 +169,7 @@ def attachnotify():
         prompt_admin_list=wxcc_global_variable_list()
         next_card_choices=choices_for_send_card(choice_list=prompt_admin_list)
         print(next_card_choices)
-        with open("base_copy.json", "r") as f:
+        with open("base_card.json", "r") as f:
             base_card = json.load(f)
         send_card=copy.deepcopy(base_card)
         print(f'send card after cpying the basecard {send_card}')
