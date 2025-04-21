@@ -172,7 +172,9 @@ def attachnotify():
         with open("base_card.json", "r") as f:
             base_card = json.load(f)
         send_card=copy.deepcopy(base_card)
-        print(f'send card after cpying the basecard {send_card}')
+        print(f'send card after copying the basecard {send_card}')
+        first_card_to_bot=json_to_code()
+        card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=first_card_to_bot)
         send_card["body"][2]["choices"] = next_card_choices
         send_card["body"][0]["text"] = "🗣️ Welcome to Prompt Admin 🗣️"
         send_card["body"][1]["text"] = "👉 Select a Global Variable"
