@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import requests
 import json
+import copy
 
 app = Flask(__name__)
 
@@ -10,6 +11,7 @@ wxcc_token='Bearer NzM3M2UwZjUtNTMzOS00NGVmLWE4YzktOGE5ZjI0MjRiNjFjMGFkMWU0OGYtZ
 org_id='f9b4fa9e-1e82-4caf-8be6-92b8011cc1aa' # enter correct org_id
 bot_email = "@webex.bot"
 bot_person_id='Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jODI5NTY3NS0zYTk2LTQ0ZGQtODBiMC1hYWMzM2MwYmZiOTA'
+all_features=["Prompt Admin","Agent Stats","Business Hours","Call Recording"]
 not_enabled_features=["Agent Stats","Business Hours","Call Recording"]
 
 # --- Json content from json file ---
@@ -18,13 +20,12 @@ def json_to_code():
     return json.load(f)
 
 # --- Webex Send card Function ---
-def card_to_bot(card_person_id,token):
+def card_to_bot(card_person_id,token,card_content):
   url='https://webexapis.com/v1/messages'
   headers={
     "Authorization": token,
     "Content-Type": "application/json"
   }
-  card_content=json_to_code()
   payload={
     "toPersonId": card_person_id,
   "markdown": "**Test Adaptive Card to User**",
@@ -100,6 +101,13 @@ def wxcc_global_variable_list():
         print("Error fetching global variable list:", str(e))
         return ["Error getting data",e]
 
+def choices_for_send_card(choice_list):
+    choices = []
+    for feature in choice_list:
+        choice = {"title": feature, "value": feature}  # Use the feature as both title and value
+        choices.append(choice)
+    return choices
+
 # --- Message Webhook Endpoint ---
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -114,7 +122,8 @@ def webhook():
         print("ignoring bot message webhook notifications")
     else:
         json_file="first_card.json"
-        card_to_bot(card_person_id=person_id,token=WEBEX_BOT_TOKEN)
+        first_card_to_bot=json_to_code()
+        card_to_bot(card_person_id=person_id,token=WEBEX_BOT_TOKEN,card_content=first_card_to_bot)
     return "webhook received",200
 '''
         if message_id:
@@ -146,7 +155,7 @@ def attachnotify():
     card_person_id=card_details_json.get("personId")
     print(f'person {card_person_id} selected this option {user_selected_option} and the message id for the card is {card_message_id}')
     if user_selected_option in not_enabled_features:
-        message_text=f' 🛠️ This Feature {user_selected_option} is still under development 🛠️'
+        message_text=f' 🛠️ {user_selected_option} Feature is still under development 🛠️'
         send_webex_message(person_id=card_person_id,text=message_text)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         print(message_delete_status_code)
@@ -156,6 +165,15 @@ def attachnotify():
         send_webex_message(person_id=card_person_id,text=message_text)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         print(message_delete_status_code)
+        prompt_admin_list=wxcc_global_variable_list()
+        next_card_choices=choices_for_send_card(choice_list=prompt_admin_list)
+        with open("base_copy.json", "r") as f:
+            base_card = json.load(f)
+        send_card=copy.deepcopy(base_card)
+        send_card["body"][0]["choices"] = next_card_choices
+        send_card["body"][0]["text"] = "🗣️ Welcome to Prompt Admin 🗣️"
+        send_card["body"][1]["text"] = "👉 Select a Global Variable"
+        card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=send_card)
         return "webhook received",200
 
 # --- Optional: Index Route ---
