@@ -1,0 +1,22 @@
+{
+    "id": "Y2lzY29zcGFyazovL3VzL1dFQkhPT0svN2YwYjVjZGQtZDY4Ny00OTc4LWFjZGYtY2RmZmE5ZDQ0YjE1",
+    "name": "wxcc bot attachment Webhook",
+    "targetUrl": "https://bot-for-wxcc.onrender.com/attachnotify",
+    "resource": "attachmentActions",
+    "event": "created",
+    "orgId": "Y2lzY29zcGFyazovL3VzL09SR0FOSVpBVElPTi9mOWI0ZmE5ZS0xZTgyLTRjYWYtOGJlNi05MmI4MDExY2MxYWE",
+    "createdBy": "Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jODI5NTY3NS0zYTk2LTQ0ZGQtODBiMC1hYWMzM2MwYmZiOTA",
+    "appId": "Y2lzY29zcGFyazovL3VzL0FQUExJQ0FUSU9OL0MzMmM4MDc3NDBjNmU3ZGYxMWRhZjE2ZjIyOGRmNjI4YmJjYTQ5YmE1MmZlY2JiMmM3ZDUxNWNiNGEwY2M5MWFh",
+    "ownedBy": "creator",
+    "status": "active",
+    "created": "2025-04-20T09:23:12.813Z",
+    "actorId": "Y2lzY29zcGFyazovL3VzL1BFT1BMRS84ZDRiYjQ0Zi0wMDVjLTRlMjctYTJkZC01ZDg5Y2VhN2Q2OGU",
+    "data": {
+        "id": "Y2lzY29zcGFyazovL3VzL0FUVEFDSE1FTlRfQUNUSU9OLzZlYjNlZmYwLTFlOTItMTFmMC04ZTM3LTM5NjVmNmM5NjRlMQ",
+        "type": "submit",
+        "messageId": "Y2lzY29zcGFyazovL3VzL01FU1NBR0UvNWJjYTA0YjAtMWU5Mi0xMWYwLWE4OWYtYzcwMjNhY2I1N2E2",
+        "personId": "Y2lzY29zcGFyazovL3VzL1BFT1BMRS84ZDRiYjQ0Zi0wMDVjLTRlMjctYTJkZC01ZDg5Y2VhN2Q2OGU",
+        "roomId": "Y2lzY29zcGFyazovL3VzL1JPT00vZTA0MTM0ZjAtMWFlOC0xMWYwLWE4ZDUtZjUwMmZjZDFiZGFh",
+        "created": "2025-04-21T09:24:31.983Z"
+    }
+}

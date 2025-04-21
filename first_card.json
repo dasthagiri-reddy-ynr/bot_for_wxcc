@@ -19,16 +19,16 @@
           },
           {
             "type": "Input.ChoiceSet",
-            "id": "global_var",
+            "id": "Select_Option",
             "style": "compact",
             "choices": [
               {
                 "title": "Prompt Admin",
-                "value": "variable1"
+                "value": "Prompt Admin"
               },
               {
                 "title": "Agent Stats",
-                "value": "variable2"
+                "value": "Agent Stats"
               },
               {
                 "title": "tts prompt",
@@ -36,7 +36,7 @@
               },
               {
                 "title": "Call Recording",
-                "value": "tts_prompt"
+                "value": "Call Recording"
               }
             ],
             "isRequired": true,
@@ -48,7 +48,7 @@
             "type": "Action.Submit",
             "title": "Next",
             "data": {
-              "action": "select_global"
+              "action": "Select_Option"
             }
           }
         ]
