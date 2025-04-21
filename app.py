@@ -15,8 +15,8 @@ all_features=["Prompt Admin","Agent Stats","Business Hours","Call Recording"]
 not_enabled_features=["Agent Stats","Business Hours","Call Recording"]
 
 # --- Json content from json file ---
-def json_to_code():
-  with open("first_card.json","r") as f:
+def json_to_code(json_card):
+  with open(json_card,"r") as f:
     return json.load(f)
 
 # --- Webex Send card Function ---
@@ -123,7 +123,7 @@ def webhook():
         print("ignoring bot message webhook notifications")
     else:
         json_file="first_card.json"
-        first_card_to_bot=json_to_code()
+        first_card_to_bot=json_to_code(json_card=json_file)
         card_to_bot(card_person_id=person_id,token=WEBEX_BOT_TOKEN,card_content=first_card_to_bot)
     return "webhook received",200
 '''
