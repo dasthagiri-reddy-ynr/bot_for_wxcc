@@ -47,4 +47,44 @@ submit the card 3rd notification
 decide a way:
 display the option selected by user and delete the card after selection.
 extract the contents of the card--- options selected and action taken..
-whenever you send a card you will get a message webhook... and whenever you submit it you will receive a attach webhook... we need to verifiy if there is any link between these two webhooks because we need to delete the message after receiving the attach ... in exact.. we need the msg webhook id in the attach notify webhook ... 
+whenever you send a card you will get a message webhook...
+ and whenever you submit it you will receive a attach webhook...
+ we need to verifiy if there is any link between these two webhooks 
+ because we need to delete the message after receiving the attach ... 
+ in exact.. we need the msg webhook id in the attach notify webhook ... 
+
+
+
+
+feature list =["Prompt Admin","Agent Stats","Business Hours","Call Recording"]
+available prompts list: [ prompt1, prompt2, prompt3]
+prompt 1 list [ update]
+update list [ update_the_prompt]
+exit [ Thank you for using the bot]
+
+user can select feature or prompt or update
+
+if usv is exit:
+      Delete the card and say Thank you.
+
+elseif usv is save:
+      save the prompt and say thank you.
+elseif usv is update:
+      get the prompt name,
+elseif usv is in prompt list:
+      send a card with that prompt details and options[update,exit]
+      
+            
+
+prompt admin : next
+list of prompts available : next 
+stores the list of prompts
+user selects prompt : next
+displays the prompt value
+options update or exit : next
+user selects update : next
+display text box, prompt name 
+user selects save: 
+send message , updated successfully.
+
+
