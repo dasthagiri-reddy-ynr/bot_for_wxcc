@@ -15,8 +15,8 @@ all_features=["Prompt Admin","Agent Stats","Business Hours","Call Recording"]
 not_enabled_features=["Agent Stats","Business Hours","Call Recording"]
 
 # --- Json content from json file ---
-def json_to_code(json_card):
-  with open(json_card,"r") as f:
+def load_card_from_file(json_file):
+  with open(json_file,"r") as f:
     return json.load(f)
 
 # --- Webex Send card Function ---
@@ -123,8 +123,8 @@ def webhook():
         print("ignoring bot message webhook notifications")
     else:
         json_file="first_card.json"
-        first_card_to_bot=json_to_code(json_card=json_file)
-        card_to_bot(card_person_id=person_id,token=WEBEX_BOT_TOKEN,card_content=first_card_to_bot)
+        first_card=load_card_from_file(json_file=json_file)
+        card_to_bot(card_person_id=person_id,token=WEBEX_BOT_TOKEN,card_content=first_card)
     return "webhook received",200
 '''
         if message_id:
@@ -165,21 +165,23 @@ def attachnotify():
         message_text=f'✅ The option {user_selected_option} is submitted successfully'
         send_webex_message(person_id=card_person_id,text=message_text)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
-        print(message_delete_status_code)
+        print("Card deleted from webex successfully with code",message_delete_status_code)
         prompt_admin_list=wxcc_global_variable_list()
         next_card_choices=choices_for_send_card(choice_list=prompt_admin_list)
         print(next_card_choices)
+        '''
         with open("base_card.json", "r") as f:
             base_card = json.load(f)
         send_card=copy.deepcopy(base_card)
         print(f'send card after copying the basecard {send_card}')
-        first_card_to_bot=json_to_code()
-        card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=first_card_to_bot)
         send_card["body"][2]["choices"] = next_card_choices
         send_card["body"][0]["text"] = "🗣️ Welcome to Prompt Admin 🗣️"
         send_card["body"][1]["text"] = "👉 Select a Global Variable"
         print(f'send card after entering the details {send_card}')
-        card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=send_card)
+'''     
+        json_file="base_card.json"
+        second_card=load_card_from_file(json_file=json_file)
+        card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=second_card)
         return "webhook received",200
 
 # --- Optional: Index Route ---
