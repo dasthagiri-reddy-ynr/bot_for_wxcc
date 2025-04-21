@@ -163,7 +163,6 @@ def attachnotify():
             print(f'send card after entering the details {second_card}')
             card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=second_card)
             return "webhook received",200
-    
     else:
         global_variable_list=wxcc_global_variable_list()
         if user_selected_option in global_variable_list:
@@ -178,7 +177,7 @@ def attachnotify():
             list_for_third_card=['Update','Exit']
             next_card_choices=choices_for_send_card(choice_list=list_for_third_card)
             third_card["content"]["body"][2]["choices"] = next_card_choices
-            third_card["content"]["body"][0]["text"] = f"{user_selected_option} default is "
+            third_card["content"]["body"][0]["text"] = f"{user_selected_option} current value is "
             third_card["content"]["body"][1]["text"] = f"👉 {default_value} 👈"
             card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=third_card)
             return "webhook received",200
