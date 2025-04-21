@@ -32,6 +32,7 @@ def card_to_bot(card_person_id,token,card_content):
   "attachments": [card_content]
   }
   response=requests.post(url,headers=headers,json=payload)
+  print(response.text)
   return response.status_code
 
 # --- Webex Send Message Function ---
@@ -167,12 +168,15 @@ def attachnotify():
         print(message_delete_status_code)
         prompt_admin_list=wxcc_global_variable_list()
         next_card_choices=choices_for_send_card(choice_list=prompt_admin_list)
+        print(next_card_choices)
         with open("base_copy.json", "r") as f:
             base_card = json.load(f)
         send_card=copy.deepcopy(base_card)
+        print(f'send card after cpying the basecard {send_card}')
         send_card["body"][0]["choices"] = next_card_choices
         send_card["body"][0]["text"] = "🗣️ Welcome to Prompt Admin 🗣️"
         send_card["body"][1]["text"] = "👉 Select a Global Variable"
+        print(f'send card after entering the details {send_card}')
         card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=send_card)
         return "webhook received",200
 
