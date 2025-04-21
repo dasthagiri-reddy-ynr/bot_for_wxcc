@@ -16,7 +16,7 @@ def json_to_code():
   with open("first_card.json","r") as f:
     return json.load(f)
 
-# --- Send first card to user ---
+# --- Webex Send card Function ---
 def card_to_bot(card_person_id,token):
   url='https://webexapis.com/v1/messages'
   headers={
@@ -46,7 +46,29 @@ def send_webex_message(person_id, text):
     response = requests.post(url, headers=headers, json=payload)
     print("Message send response:", response.status_code, response.text)
 
-# --- Function to get the actual message from webex---
+# --- Webex Delete Message Function ---
+def delete_webex_message(message_id):
+    url =f'https://webexapis.com/v1/messages/{message_id}'
+    headers={
+        "Authorization": WEBEX_BOT_TOKEN,
+        "Content-Type": "application/json"
+    }
+    response = requests.delete(url,headers=headers)
+    print("Message deleted successfully",response.status_code)
+    return response.status_code
+
+# --- Webex Card details Function ---
+def get_card_details(card_id):
+    url=f'https://webexapis.com/v1/attachment/actions/{card_id}'
+    headers={
+        "Authorization": WEBEX_BOT_TOKEN,
+        "Content-Type": "application/json"
+    }
+    response=requests.get(url,headers=headers)
+    print("Got the card details successfully",response.status_code)
+    return response.json()
+
+# --- Webex Message details Function ---
 def get_message_from_id(msg_id):
     url=f'https://webexapis.com/v1/messages/{msg_id}'
     headers={
@@ -116,6 +138,16 @@ def webhook():
 def attachnotify():
     received_payload=request.json
     print("webex attachment webhook card submit receivedwith data:",received_payload)
+    card_id=received_payload.get("data",{}).get('id')
+    card_details_json=get_card_details(card_id)
+    user_selected_option=card_details_json.get("inputs",{}).get("Select_option")
+    card_message_id=card_details_json.get("messageId")
+    card_person_id=card_details_json.get("personId")
+    print(f'person {card_person_id} selected this option {user_selected_option} and the message id for the card is {card_message_id}')
+    message_text=f'✅ The option {user_selected_option} is submitted successfully'
+    send_webex_message(person_id=card_person_id,text=message_text)
+    message_delete_status_code=delete_webex_message(message_id=card_message_id)
+    print(message_delete_status_code)
     return "webhook received",200
 
 # --- Optional: Index Route ---
