@@ -43,3 +43,8 @@ sequence:
 msg from user 1st msg notification
 reply from bot with card 2nd attachment notification and 3rd notification as msg
 submit the card 3rd notification
+
+decide a way:
+display the option selected by user and delete the card after selection.
+extract the contents of the card--- options selected and action taken..
+whenever you send a card you will get a message webhook... and whenever you submit it you will receive a attach webhook... we need to verifiy if there is any link between these two webhooks because we need to delete the message after receiving the attach ... in exact.. we need the msg webhook id in the attach notify webhook ... 
