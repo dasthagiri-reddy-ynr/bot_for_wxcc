@@ -183,9 +183,9 @@ def attachnotify():
         base_card_copy=load_card_from_file(json_file=json_file)
         second_card=copy.deepcopy(base_card_copy)
         print(f'send card after copying the basecard {second_card}')
-        second_card["body"][2]["choices"] = next_card_choices
-        second_card["body"][0]["text"] = "🗣️ Welcome to Prompt Admin 🗣️"
-        second_card["body"][1]["text"] = "👉 Select a Global Variable"
+        second_card["content"]["body"][2]["choices"] = next_card_choices
+        second_card["content"]["body"][0]["text"] = "🗣️ Welcome to Prompt Admin 🗣️"
+        second_card["content"]["body"][1]["text"] = "👉 Select a Global Variable"
         print(f'send card after entering the details {second_card}')
         card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=second_card)
         return "webhook received",200
