@@ -189,6 +189,7 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
                 third_card["content"]["actions"][1]["data"]["global_variable"] = f"{user_selected_option}"
                 third_card["content"]["actions"][0]["data"]["main_feature"] = "Prompt Admin"
                 third_card["content"]["actions"][1]["data"]["main_feature"] = "Prompt Admin"
+                print(f"the completed third card is {third_card}")
                 card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=third_card)
                 return "webhook received",200
             else:
