@@ -144,24 +144,23 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
     elif user_action=="update":
         if prompt!="no_input":
             default_global_variable_value=prompt
-            message_text=f" ✅ Your {current_global_variable} updated successfully with this Message: {prompt}. /n Thank you for using the Bot, feedback,suggetings to ITUnifiedCommunications@rsmus.com "
+            message_text=f" ✅ Your {current_global_variable} updated successfully with this Message: {prompt}. \n Thank you for using the Bot, For feedback and suggestions mail: ITUnifiedCommunications@rsmus.com "
             send_webex_message(person_id=card_person_id,text=message_text)
             message_delete_status_code=delete_webex_message(message_id=card_message_id)
             return "webhook received",200
         else:
-            message_text="❌ Sorry You selected Update without entering the new message /n Thank you for using the Bot, feedback,suggetings to ITUnifiedCommunications@rsmus.com "
+            message_text="❌ Sorry You selected Update without entering the new message \n Thank you for using the Bot, For feedback and suggestions to mail: ITUnifiedCommunications@rsmus.com "
             send_webex_message(person_id=card_person_id,text=message_text)
             message_delete_status_code=delete_webex_message(message_id=card_message_id)
             return "webhook received",200
     else:
         if user_selected_option=="Prompt Admin":
-            message_text=f'✅ The option {user_selected_option} is submitted successfully'
+            message_text=f'✅ The Option you selected is: {user_selected_option} '
             send_webex_message(person_id=card_person_id,text=message_text)
             message_delete_status_code=delete_webex_message(message_id=card_message_id)
             print("Card deleted from webex successfully with code",message_delete_status_code)
             prompt_admin_list=wxcc_global_variable_list()
-            next_card_choices=choices_for_send_card(choice_list=prompt_admin_list)
-            print(next_card_choices)  
+            next_card_choices=choices_for_send_card(choice_list=prompt_admin_list)  
             json_file="base_card.json"
             base_card_copy=load_card_from_file(json_file=json_file)
             second_card=copy.deepcopy(base_card_copy)
@@ -170,7 +169,6 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
             second_card["content"]["body"][0]["text"] = "🗣️ Welcome to Prompt Admin 🗣️"
             second_card["content"]["body"][1]["text"] = "👉 Select a Global Variable"
             second_card["content"]["actions"][0]["data"]["main_feature"] = "Prompt Admin"
-            print(f'send card after entering the details {second_card}')
             card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=second_card)
             return "webhook received",200
         else:
@@ -190,7 +188,6 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
                 third_card["content"]["actions"][1]["data"]["global_variable"] = f"{user_selected_option}"
                 third_card["content"]["actions"][0]["data"]["main_feature"] = "Prompt Admin"
                 third_card["content"]["actions"][1]["data"]["main_feature"] = "Prompt Admin"
-                print(f"the completed third card is {third_card}")
                 card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=third_card)
                 return "webhook received",200
             else:
@@ -224,15 +221,10 @@ def attachnotify():
     card_id=received_payload.get("data",{}).get('id')
     card_details_json=get_card_details(card_id)
     user_selected_option=card_details_json.get("inputs",{}).get("Select_option", "no_input")
-    print(user_selected_option)
     user_action=card_details_json.get("inputs",{}).get("action", "default")
-    print(user_action)
     new_prompt=card_details_json.get("inputs",{}).get("updated_prompt", "no_input")
-    print(new_prompt)
     main_feature=card_details_json.get("inputs",{}).get("main_feature")
-    print(main_feature)
     Current_global_variable=card_details_json.get("inputs",{}).get("global_variable", "no_input")
-    print(Current_global_variable)
     card_message_id=card_details_json.get("messageId")
     card_person_id=card_details_json.get("personId")
     print(f'person {card_person_id} selected this option {user_selected_option} , {main_feature} and the message id for the card is {card_message_id}')
