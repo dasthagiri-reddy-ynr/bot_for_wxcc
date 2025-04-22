@@ -41,7 +41,7 @@
       "actions": [
         {
             "type": "Action.Submit",
-            "title": "Update",
+            "title": "update",
             "data": {
               "action": "update",
               "main_feature": "Prompt Admin",
