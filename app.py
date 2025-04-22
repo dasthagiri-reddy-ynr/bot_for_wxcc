@@ -180,13 +180,14 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
                 send_webex_message(person_id=card_person_id,text=message_text)
                 message_delete_status_code=delete_webex_message(message_id=card_message_id)
                 print("Card deleted from webex successfully with code",message_delete_status_code)
+                default_global_variable_value="This is the value stored in the global variable"
                 json_file="base_update_card.json"
                 base_card_copy=load_card_from_file(json_file=json_file)
                 third_card=copy.deepcopy(base_card_copy)
                 third_card["content"]["body"][0]["text"] = f"{user_selected_option}"
                 third_card["content"]["body"][2]["text"] = f"{default_global_variable_value}"
-                #third_card["content"]["actions"][0]["data"]["global_variable"] = f"{user_selected_option}"
-                #third_card["content"]["actions"][1]["data"]["global_variable"] = f"{user_selected_option}"
+                third_card["content"]["actions"][0]["data"]["global_variable"] = f"{user_selected_option}"
+                third_card["content"]["actions"][1]["data"]["global_variable"] = f"{user_selected_option}"
                 third_card["content"]["actions"][0]["data"]["main_feature"] = "Prompt Admin"
                 third_card["content"]["actions"][1]["data"]["main_feature"] = "Prompt Admin"
                 print(f"the completed third card is {third_card}")
