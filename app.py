@@ -13,6 +13,7 @@ bot_email = "@webex.bot"
 bot_person_id='Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jODI5NTY3NS0zYTk2LTQ0ZGQtODBiMC1hYWMzM2MwYmZiOTA'
 all_features=["Prompt Admin","Agent Stats","Business Hours","Call Recording"]
 not_enabled_features=["Agent Stats","Business Hours","Call Recording"]
+default_global_variable_value="This is the value stored in the global variable"
 
 # --- Json content from json file ---
 def load_card_from_file(json_file):
@@ -134,15 +135,16 @@ def call_recording_section(card_person_id,user_selected_option,main_feature,card
         return "webhook received",200
 
 # --- Prompt Admin section function ---
-def prompt_admin_section(card_person_id,user_selected_option,user_action,card_message_id):
+def prompt_admin_section(card_person_id,user_selected_option,user_action,card_message_id,prompt,current_global_variable):
     if user_action=="exit":
         message_text="✅ Thank you for using the Bot, feedback,suggetings to ITUnifiedCommunications@rsmus.com "
         send_webex_message(person_id=card_person_id,text=message_text)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         return "webhook received",200
     elif user_action=="update":
-        if new_prompt!="no_input":
-            message_text=f" ✅ Your {Current_global_variable} updated successfully with this Message: {new_prompt}. /n Thank you for using the Bot, feedback,suggetings to ITUnifiedCommunications@rsmus.com "
+        if prompt!="no_input":
+            default_global_variable_value=prompt
+            message_text=f" ✅ Your {current_global_variable} updated successfully with this Message: {prompt}. /n Thank you for using the Bot, feedback,suggetings to ITUnifiedCommunications@rsmus.com "
             send_webex_message(person_id=card_person_id,text=message_text)
             message_delete_status_code=delete_webex_message(message_id=card_message_id)
             return "webhook received",200
@@ -178,7 +180,6 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
                 send_webex_message(person_id=card_person_id,text=message_text)
                 message_delete_status_code=delete_webex_message(message_id=card_message_id)
                 print("Card deleted from webex successfully with code",message_delete_status_code)
-                default_global_variable_value="This is the value stored in the global variable"
                 json_file="base_update_card.json"
                 base_card_copy=load_card_from_file(json_file=json_file)
                 third_card=copy.deepcopy(base_card_copy)
@@ -238,7 +239,7 @@ def attachnotify():
         elif user_selected_option=="Call Recording":
             call_recording_section(card_person_id=card_person_id,user_selected_option=user_selected_option,main_feature=main_feature,card_message_id=card_message_id)
         else:
-            prompt_admin_section(card_person_id=card_person_id,user_selected_option=user_selected_option,user_action=user_action,card_message_id=card_message_id)
+            prompt_admin_section(card_person_id=card_person_id,user_selected_option=user_selected_option,user_action=user_action,card_message_id=card_message_id,prompt=new_prompt,current_global_variable=Current_global_variable)
     else:
         if main_feature=="Agent Stats":
             agent_stats_section(card_person_id=card_person_id,user_selected_option=user_selected_option,main_feature=main_feature,card_message_id=card_message_id)
@@ -248,7 +249,7 @@ def attachnotify():
         elif user_selected_option=="Call Recording":
             call_recording_section(card_person_id=card_person_id,user_selected_option=user_selected_option,main_feature=main_feature,card_message_id=card_message_id)
         else:
-            prompt_admin_section(card_person_id=card_person_id,user_selected_option=user_selected_option,user_action=user_action,card_message_id=card_message_id)
+            prompt_admin_section(card_person_id=card_person_id,user_selected_option=user_selected_option,user_action=user_action,card_message_id=card_message_id,prompt=new_prompt,current_global_variable=Current_global_variable)
 
 
 
