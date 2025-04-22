@@ -134,45 +134,64 @@ def call_recording_section(card_person_id,user_selected_option,main_feature,card
         return "webhook received",200
 
 # --- Prompt Admin section function ---
-def prompt_admin_section(card_person_id,user_selected_option,card_message_id):
-    if user_selected_option=="Prompt Admin":
-        message_text=f'✅ The option {user_selected_option} is submitted successfully'
+def prompt_admin_section(card_person_id,user_selected_option,user_action,card_message_id):
+    if user_action=="exit":
+        message_text="✅ Thank you for using the Bot, feedback,suggetings to ITUnifiedCommunications@rsmus.com "
         send_webex_message(person_id=card_person_id,text=message_text)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
-        print("Card deleted from webex successfully with code",message_delete_status_code)
-        prompt_admin_list=wxcc_global_variable_list()
-        next_card_choices=choices_for_send_card(choice_list=prompt_admin_list)
-        print(next_card_choices)  
-        json_file="base_card.json"
-        base_card_copy=load_card_from_file(json_file=json_file)
-        second_card=copy.deepcopy(base_card_copy)
-        print(f'send card after copying the basecard {second_card}')
-        second_card["content"]["body"][2]["choices"] = next_card_choices
-        second_card["content"]["body"][0]["text"] = "🗣️ Welcome to Prompt Admin 🗣️"
-        second_card["content"]["body"][1]["text"] = "👉 Select a Global Variable"
-        second_card["content"]["actions"][0]["data"]["main_feature"] = "Prompt Admin"
-        print(f'send card after entering the details {second_card}')
-        card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=second_card)
         return "webhook received",200
+    elif user_action=="update":
+        if new_prompt!="no_input":
+            message_text=f" ✅ Your {Current_global_variable} updated successfully with this Message: {new_prompt}. /n Thank you for using the Bot, feedback,suggetings to ITUnifiedCommunications@rsmus.com "
+            send_webex_message(person_id=card_person_id,text=message_text)
+            message_delete_status_code=delete_webex_message(message_id=card_message_id)
+            return "webhook received",200
+        else:
+            message_text="❌ Sorry You selected Update without entering the new message /n Thank you for using the Bot, feedback,suggetings to ITUnifiedCommunications@rsmus.com "
+            send_webex_message(person_id=card_person_id,text=message_text)
+            message_delete_status_code=delete_webex_message(message_id=card_message_id)
+            return "webhook received",200
     else:
-        global_variable_list=wxcc_global_variable_list()
-        if user_selected_option in global_variable_list:
-            message_text=f'✅ The data for the option {user_selected_option} retrived successfully'
+        if user_selected_option=="Prompt Admin":
+            message_text=f'✅ The option {user_selected_option} is submitted successfully'
             send_webex_message(person_id=card_person_id,text=message_text)
             message_delete_status_code=delete_webex_message(message_id=card_message_id)
             print("Card deleted from webex successfully with code",message_delete_status_code)
-            default_value="This is the value stored in the global variable"
-            json_file="base_update_card.json"
+            prompt_admin_list=wxcc_global_variable_list()
+            next_card_choices=choices_for_send_card(choice_list=prompt_admin_list)
+            print(next_card_choices)  
+            json_file="base_card.json"
             base_card_copy=load_card_from_file(json_file=json_file)
-            third_card=copy.deepcopy(base_card_copy)
-            third_card["content"]["body"][0]["text"] = f"{user_selected_option} "
-            third_card["content"]["body"][2]["text"] = f"{default_value}"
-            third_card["content"]["actions"][0]["data"]["main_feature"] = "Prompt Admin"
-            third_card["content"]["actions"][1]["data"]["main_feature"] = "Prompt Admin"
-            card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=third_card)
+            second_card=copy.deepcopy(base_card_copy)
+            print(f'send card after copying the basecard {second_card}')
+            second_card["content"]["body"][2]["choices"] = next_card_choices
+            second_card["content"]["body"][0]["text"] = "🗣️ Welcome to Prompt Admin 🗣️"
+            second_card["content"]["body"][1]["text"] = "👉 Select a Global Variable"
+            second_card["content"]["actions"][0]["data"]["main_feature"] = "Prompt Admin"
+            print(f'send card after entering the details {second_card}')
+            card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=second_card)
             return "webhook received",200
         else:
-            return "webhook received",200
+            global_variable_list=wxcc_global_variable_list()
+            if user_selected_option in global_variable_list:
+                message_text=f'✅ The data for the option {user_selected_option} retrived successfully'
+                send_webex_message(person_id=card_person_id,text=message_text)
+                message_delete_status_code=delete_webex_message(message_id=card_message_id)
+                print("Card deleted from webex successfully with code",message_delete_status_code)
+                default_global_variable_value="This is the value stored in the global variable"
+                json_file="base_update_card.json"
+                base_card_copy=load_card_from_file(json_file=json_file)
+                third_card=copy.deepcopy(base_card_copy)
+                third_card["content"]["body"][0]["text"] = f"{user_selected_option}"
+                third_card["content"]["body"][2]["text"] = f"{default_global_variable_value}"
+                third_card["content"]["actions"][0]["data"]["global_variable"] = f"{user_selected_option}"
+                third_card["content"]["actions"][1]["data"]["global_variable"] = f"{user_selected_option}"
+                third_card["content"]["actions"][0]["data"]["main_feature"] = "Prompt Admin"
+                third_card["content"]["actions"][1]["data"]["main_feature"] = "Prompt Admin"
+                card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=third_card)
+                return "webhook received",200
+            else:
+                return "webhook received",200
 # --- Message Webhook Endpoint ---
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -201,8 +220,11 @@ def attachnotify():
     print("webex attachment webhook card submit receivedwith data:",received_payload)
     card_id=received_payload.get("data",{}).get('id')
     card_details_json=get_card_details(card_id)
-    user_selected_option=card_details_json.get("inputs",{}).get("Select_option")
+    user_selected_option=card_details_json.get("inputs",{}).get("Select_option", "no_input")
+    user_action=card_details_json.get("inputs",{}).get("action", "default")
+    new_prompt=card_details_json.get("inputs",{}).get("updated_prompt", "no_input")
     main_feature=card_details_json.get("inputs",{}).get("main_feature")
+    Current_global_variable=card_details_json.get("inputs",{}).get("global_variable", "no_input")
     card_message_id=card_details_json.get("messageId")
     card_person_id=card_details_json.get("personId")
     print(f'person {card_person_id} selected this option {user_selected_option} , {main_feature} and the message id for the card is {card_message_id}')
@@ -216,7 +238,7 @@ def attachnotify():
         elif user_selected_option=="Call Recording":
             call_recording_section(card_person_id=card_person_id,user_selected_option=user_selected_option,main_feature=main_feature,card_message_id=card_message_id)
         else:
-            prompt_admin_section(card_person_id=card_person_id,user_selected_option=user_selected_option,card_message_id=card_message_id)
+            prompt_admin_section(card_person_id=card_person_id,user_selected_option=user_selected_option,user_action=user_action,card_message_id=card_message_id)
     else:
         if main_feature=="Agent Stats":
             agent_stats_section(card_person_id=card_person_id,user_selected_option=user_selected_option,main_feature=main_feature,card_message_id=card_message_id)
@@ -226,7 +248,7 @@ def attachnotify():
         elif user_selected_option=="Call Recording":
             call_recording_section(card_person_id=card_person_id,user_selected_option=user_selected_option,main_feature=main_feature,card_message_id=card_message_id)
         else:
-            prompt_admin_section(card_person_id=card_person_id,user_selected_option=user_selected_option,card_message_id=card_message_id)
+            prompt_admin_section(card_person_id=card_person_id,user_selected_option=user_selected_option,user_action=user_action,card_message_id=card_message_id)
 
 
 
