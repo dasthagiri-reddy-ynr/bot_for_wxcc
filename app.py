@@ -157,20 +157,18 @@ def prompt_admin_section(card_person_id,user_selected_option,card_message_id):
     else:
         global_variable_list=wxcc_global_variable_list()
         if user_selected_option in global_variable_list:
-            message_text=f'✅ The option {user_selected_option} is submitted successfully'
+            message_text=f'✅ The data for the option {user_selected_option} retrived successfully'
             send_webex_message(person_id=card_person_id,text=message_text)
             message_delete_status_code=delete_webex_message(message_id=card_message_id)
             print("Card deleted from webex successfully with code",message_delete_status_code)
             default_value="This is the value stored in the global variable"
-            json_file="base_card.json"
+            json_file="base_update_card.json"
             base_card_copy=load_card_from_file(json_file=json_file)
             third_card=copy.deepcopy(base_card_copy)
-            list_for_third_card=['Update','Exit']
-            next_card_choices=choices_for_send_card(choice_list=list_for_third_card)
-            third_card["content"]["body"][2]["choices"] = next_card_choices
-            third_card["content"]["body"][0]["text"] = f"{user_selected_option} current value is "
-            third_card["content"]["body"][1]["text"] = f"👉 {default_value} 👈"
+            third_card["content"]["body"][0]["text"] = f"{user_selected_option} "
+            third_card["content"]["body"][2]["text"] = f"{default_value}"
             third_card["content"]["actions"][0]["data"]["main_feature"] = "Prompt Admin"
+            third_card["content"]["actions"][1]["data"]["main_feature"] = "Prompt Admin"
             card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=third_card)
             return "webhook received",200
         else:

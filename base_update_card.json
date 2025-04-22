@@ -1,0 +1,61 @@
+{
+    "contentType": "application/vnd.microsoft.card.adaptive",
+    "content": {
+      "type": "AdaptiveCard",
+      "version": "1.2",
+      "body": [
+        {
+          "type": "TextBlock",
+          "text": "🌐 This is the Base card for Update 🌐",
+          "weight": "Bolder",
+          "size": "Large",
+          "wrap": true
+        },
+        {
+          "type": "TextBlock",
+          "text": "Current Message",
+          "weight": "Bolder",
+          "wrap": true,
+          "spacing": "Medium"
+        },
+        {
+          "type": "TextBlock",
+          "text": "This is the current value of the global variable.",
+          "wrap": true,
+          "spacing": "Small",
+          "color": "Accent"
+        },
+        {
+          "type": "TextBlock",
+          "text": "New Message",
+          "weight": "Bolder",
+          "wrap": true,
+          "spacing": "Medium"
+        },
+        {
+          "type": "Input.Text",
+          "id": "new_value",
+          "placeholder": "Type a new value only if you want to update"
+        }
+      ],
+      "actions": [
+        {
+            "type": "Action.Submit",
+            "title": "Update",
+            "data": {
+              "action": "update",
+              "main_feature": "Prompt Admin"
+            }
+          },
+          {
+            "type": "Action.Submit",
+            "title": "Exit",
+            "data": {
+              "action": "exit",
+              "main_feature": "Prompt Admin"
+          }
+        }
+      ]
+    }
+  }
+  
