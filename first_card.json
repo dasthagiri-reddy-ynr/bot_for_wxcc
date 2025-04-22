@@ -48,7 +48,7 @@
             "type": "Action.Submit",
             "title": "Next",
             "data": {
-              "action": "Select_option"
+              "card_state": "first_card_completed"
             }
           }
         ]

@@ -88,3 +88,29 @@ user selects save:
 send message , updated successfully.
 
 
+Finally, second card sent successfully yay...
+
+next steps: handle the second message and reply with third card.
+
+after second card submit, we will get the global_variable_name as output from user.
+
+user_selected_option ---> any one of this ['Global_FeedbackSurveyOptIn', 'Global_VoiceName', 
+                                    'org_id', 'tts_prompt', 'Global_Language', 'global_variable_testing_giri']
+
+if usv in all_features:
+      if usv in not_enabled_features:
+            send this feature will be available in future
+      else usv not in not_enabled_features:
+            its a avaialbe feature(prompt_admin)
+            api to wxcc to get the list of global variables 
+            send that info to bot as 2nd card.
+else usv not in all_feature:
+      api call to wxcc to get the list of global variables.
+      if usv in global_variable list:
+            api request to wxcc to get the default value of that global variable
+            send that info to bot as 3rd card.
+      else: usv is update:
+            will plan this next time
+
+
+            
