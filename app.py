@@ -122,8 +122,12 @@ def webhook():
     if bot_person_id in person_id:
         print("ignoring bot message webhook notifications")
     else:
-        json_file="first_card.json"
-        first_card=load_card_from_file(json_file=json_file)
+        json_file="base_card.json"
+        first_card_choices=choices_for_send_card(choice_list=all_features)
+        base_card_copy=load_card_from_file(json_file=json_file)
+        first_card=copy.deepcopy(base_card_copy)
+        first_card["content"]["body"][2]["choices"] = first_card_choices
+        first_card["content"]["actions"][0]["data"]["main_feature"] = "This_is_first_card"
         card_to_bot(card_person_id=person_id,token=WEBEX_BOT_TOKEN,card_content=first_card)
     return "webhook received",200
 # --- Attachment webhook notification ---
