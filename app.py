@@ -185,8 +185,8 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
                 third_card=copy.deepcopy(base_card_copy)
                 third_card["content"]["body"][0]["text"] = f"{user_selected_option}"
                 third_card["content"]["body"][2]["text"] = f"{default_global_variable_value}"
-                third_card["content"]["actions"][0]["data"]["global_variable"] = f"{user_selected_option}"
-                third_card["content"]["actions"][1]["data"]["global_variable"] = f"{user_selected_option}"
+                #third_card["content"]["actions"][0]["data"]["global_variable"] = f"{user_selected_option}"
+                #third_card["content"]["actions"][1]["data"]["global_variable"] = f"{user_selected_option}"
                 third_card["content"]["actions"][0]["data"]["main_feature"] = "Prompt Admin"
                 third_card["content"]["actions"][1]["data"]["main_feature"] = "Prompt Admin"
                 print(f"the completed third card is {third_card}")
