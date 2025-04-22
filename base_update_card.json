@@ -44,7 +44,8 @@
             "title": "Update",
             "data": {
               "action": "update",
-              "main_feature": "Prompt Admin"
+              "main_feature": "Prompt Admin",
+              "global_variable": " testing"
             }
           },
           {
@@ -52,7 +53,8 @@
             "title": "Exit",
             "data": {
               "action": "exit",
-              "main_feature": "Prompt Admin"
+              "main_feature": "Prompt Admin",
+              "global_variable": " testing"
           }
         }
       ]
