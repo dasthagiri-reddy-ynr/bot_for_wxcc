@@ -34,7 +34,7 @@
         },
         {
           "type": "Input.Text",
-          "id": "new_value",
+          "id": "updated_prompt",
           "placeholder": "Type a new value only if you want to update"
         }
       ],
