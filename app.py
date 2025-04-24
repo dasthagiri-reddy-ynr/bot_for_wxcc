@@ -240,6 +240,7 @@ def attachnotify():
     user_selected_option=card_details_json.get("inputs",{}).get("Select_option", "no_input")
     user_action=card_details_json.get("inputs",{}).get("action", "default")
     new_prompt=card_details_json.get("inputs",{}).get("updated_prompt", "no_input")
+    print("you will get this value only when user updates something on the new msg on the third card otherwise it will be no_input",new_prompt)
     main_feature=card_details_json.get("inputs",{}).get("main_feature")
     Current_global_variable=card_details_json.get("inputs",{}).get("global_variable", "no_input")
     Current_global_variable_id=card_details_json.get("inputs",{}).get("global_variable_id", "no_input")
