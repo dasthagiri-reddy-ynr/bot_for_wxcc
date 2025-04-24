@@ -95,10 +95,16 @@ def wxcc_global_variable_list():
     try:
         response = requests.get(url, headers=headers)
         response.raise_for_status()
-        data = response.json()
-        gb_var_list = [names['name'] for names in data.get("data", [])]
-        print(gb_var_list)
-        return gb_var_list
+        data = response.json().get("data",[])
+        gb_var_dict = { item["name"]:{
+            "id": item["id"],
+            "name": item["name"],
+            "defaultValue": item.get("defaultValue","")
+        }
+        for item in data
+        }
+        print(gb_var_dict)
+        return gb_var_dict
     except Exception as e:
         print("Error fetching global variable list:", str(e))
         return ["Error getting data",e]
@@ -137,7 +143,7 @@ def call_recording_section(card_person_id,user_selected_option,main_feature,card
 # --- Prompt Admin section function ---
 def prompt_admin_section(card_person_id,user_selected_option,user_action,card_message_id,prompt,current_global_variable):
     if user_action=="exit":
-        message_text="✅ Thank you for using the Bot, feedback,suggetings to ITUnifiedCommunications@rsmus.com "
+        message_text="✅ Thank you for using the Bot, For Feedback and suggestions mail to ITUnifiedCommunications@rsmus.com "
         send_webex_message(person_id=card_person_id,text=message_text)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         return "webhook received",200
@@ -159,8 +165,10 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
             send_webex_message(person_id=card_person_id,text=message_text)
             message_delete_status_code=delete_webex_message(message_id=card_message_id)
             print("Card deleted from webex successfully with code",message_delete_status_code)
-            prompt_admin_list=wxcc_global_variable_list()
-            next_card_choices=choices_for_send_card(choice_list=prompt_admin_list)  
+            global_variable_dict=wxcc_global_variable_list()
+            global_variable_list=list(global_variable_dict.keys())
+            print(global_variable_list)
+            next_card_choices=choices_for_send_card(choice_list=global_variable_list)  
             json_file="base_card.json"
             base_card_copy=load_card_from_file(json_file=json_file)
             second_card=copy.deepcopy(base_card_copy)
@@ -172,20 +180,29 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
             card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=second_card)
             return "webhook received",200
         else:
-            global_variable_list=wxcc_global_variable_list()
+            global_variable_dict=wxcc_global_variable_list()
+            global_variable_list=list(global_variable_dict.keys())
+            print(global_variable_list)
             if user_selected_option in global_variable_list:
                 message_text=f'✅ The data for the option {user_selected_option} retrived successfully'
                 send_webex_message(person_id=card_person_id,text=message_text)
                 message_delete_status_code=delete_webex_message(message_id=card_message_id)
                 print("Card deleted from webex successfully with code",message_delete_status_code)
-                default_global_variable_value="This is the value stored in the global variable"
+                uso_cmpt_info=global_variable_dict(user_selected_option, {})
+                global_variable_id=uso_cmpt_info("id")
+                default_global_variable_value=uso_cmpt_info.get("defaultValue")
+                print(uso_cmpt_info)
+                print(global_variable_id)
+                print(default_global_variable_value)
                 json_file="base_update_card.json"
                 base_card_copy=load_card_from_file(json_file=json_file)
                 third_card=copy.deepcopy(base_card_copy)
                 third_card["content"]["body"][0]["text"] = f"{user_selected_option}"
                 third_card["content"]["body"][2]["text"] = f"{default_global_variable_value}"
-                third_card["content"]["actions"][0]["data"]["global_variable"] = f"{user_selected_option}"
-                third_card["content"]["actions"][1]["data"]["global_variable"] = f"{user_selected_option}"
+                third_card["content"]["actions"][0]["data"]["global_variable"] = user_selected_option
+                third_card["content"]["actions"][1]["data"]["global_variable"] = user_selected_option
+                third_card["content"]["actions"][0]["data"]["global_variable_id"] = global_variable_id
+                third_card["content"]["actions"][1]["data"]["global_variable_id"] = global_variable_id
                 third_card["content"]["actions"][0]["data"]["main_feature"] = "Prompt Admin"
                 third_card["content"]["actions"][1]["data"]["main_feature"] = "Prompt Admin"
                 card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=third_card)
@@ -225,6 +242,8 @@ def attachnotify():
     new_prompt=card_details_json.get("inputs",{}).get("updated_prompt", "no_input")
     main_feature=card_details_json.get("inputs",{}).get("main_feature")
     Current_global_variable=card_details_json.get("inputs",{}).get("global_variable", "no_input")
+    Current_global_variable_id=card_details_json.get("inputs",{}).get("global_variable_id", "no_input")
+    print("This will only be a id after user submits the third card , untill then it will be no_input",Current_global_variable_id)
     card_message_id=card_details_json.get("messageId")
     card_person_id=card_details_json.get("personId")
     print(f'person {card_person_id} selected this option {user_selected_option} , {main_feature} and the message id for the card is {card_message_id}')
