@@ -41,11 +41,10 @@
       "actions": [
         {
             "type": "Action.Submit",
-            "title": "update",
+            "title": "Update",
             "data": {
               "action": "update",
-              "main_feature": "Prompt Admin",
-              "global_variable": "testing"
+              "main_feature": "Prompt Admin"
             }
           },
           {
@@ -53,8 +52,7 @@
             "title": "Exit",
             "data": {
               "action": "exit",
-              "main_feature": "Prompt Admin",
-              "global_variable": "testing"
+              "main_feature": "Prompt Admin"
           }
         }
       ]

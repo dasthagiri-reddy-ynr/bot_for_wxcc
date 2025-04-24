@@ -9,11 +9,8 @@ app = Flask(__name__)
 WEBEX_BOT_TOKEN = 'Bearer MTM3OTkxYWUtNzgwYS00MDg1LWE2ZTktZDAzMzkzYTk1NGY0YzM2MDAyNjQtZjU1_PF84_f9b4fa9e-1e82-4caf-8be6-92b8011cc1aa'  # Replace with your real token
 wxcc_token='Bearer MmM5NDQxMTktOGY1Zi00ZDMzLWExZTQtNTNkMjUzZjcyZTE2MWI5YzRlOGMtNmI3_PF84_f9b4fa9e-1e82-4caf-8be6-92b8011cc1aa'  # Replace with your real token
 org_id='f9b4fa9e-1e82-4caf-8be6-92b8011cc1aa' # enter correct org_id
-bot_email = "@webex.bot"
 bot_person_id='Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jODI5NTY3NS0zYTk2LTQ0ZGQtODBiMC1hYWMzM2MwYmZiOTA'
 all_features=["Prompt Admin","Agent Stats","Business Hours","Call Recording"]
-not_enabled_features=["Agent Stats","Business Hours","Call Recording"]
-default_global_variable_value="This is the value stored in the global variable"
 
 # --- Json content from json file ---
 def load_card_from_file(json_file):
@@ -33,7 +30,6 @@ def card_to_bot(card_person_id,token,card_content):
   "attachments": [card_content]
   }
   response=requests.post(url,headers=headers,json=payload)
-  print(response.text)
   return response.status_code
 
 # --- Webex Send Message Function ---
@@ -141,15 +137,16 @@ def call_recording_section(card_person_id,user_selected_option,main_feature,card
         return "webhook received",200
 
 # --- Prompt Admin section function ---
-def prompt_admin_section(card_person_id,user_selected_option,user_action,card_message_id,prompt,current_global_variable):
+def prompt_admin_section(card_person_id,user_selected_option,user_action,card_message_id,prompt,current_global_variable,global_variable_id):
     if user_action=="exit":
         message_text="✅ Thank you for using the Bot, For Feedback and suggestions mail to ITUnifiedCommunications@rsmus.com "
         send_webex_message(person_id=card_person_id,text=message_text)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         return "webhook received",200
     elif user_action=="update":
-        if prompt!="no_input":
+        if prompt and prompt.strip():
             default_global_variable_value=prompt
+            print("The global Variable ID is :",global_variable_id)
             message_text=f" ✅ Your {current_global_variable} updated successfully with this Message: {prompt}. \n Thank you for using the Bot, For feedback and suggestions mail: ITUnifiedCommunications@rsmus.com "
             send_webex_message(person_id=card_person_id,text=message_text)
             message_delete_status_code=delete_webex_message(message_id=card_message_id)
@@ -172,7 +169,6 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
             json_file="base_card.json"
             base_card_copy=load_card_from_file(json_file=json_file)
             second_card=copy.deepcopy(base_card_copy)
-            print(f'send card after copying the basecard {second_card}')
             second_card["content"]["body"][2]["choices"] = next_card_choices
             second_card["content"]["body"][0]["text"] = "🗣️ Welcome to Prompt Admin 🗣️"
             second_card["content"]["body"][1]["text"] = "👉 Select a Global Variable"
@@ -237,14 +233,12 @@ def attachnotify():
     print("webex attachment webhook card submit receivedwith data:",received_payload)
     card_id=received_payload.get("data",{}).get('id')
     card_details_json=get_card_details(card_id)
-    user_selected_option=card_details_json.get("inputs",{}).get("Select_option", "no_input")
-    user_action=card_details_json.get("inputs",{}).get("action", "default")
-    new_prompt=card_details_json.get("inputs",{}).get("updated_prompt", "no_input")
-    print("you will get this value only when user updates something on the new msg on the third card otherwise it will be no_input",new_prompt)
+    user_selected_option=card_details_json.get("inputs",{}).get("Select_option")
+    user_action=card_details_json.get("inputs",{}).get("action")
+    new_prompt=card_details_json.get("inputs",{}).get("updated_prompt")
     main_feature=card_details_json.get("inputs",{}).get("main_feature")
     Current_global_variable=card_details_json.get("inputs",{}).get("global_variable", "no_input")
     Current_global_variable_id=card_details_json.get("inputs",{}).get("global_variable_id", "no_input")
-    print("This will only be a id after user submits the third card , untill then it will be no_input",Current_global_variable_id)
     card_message_id=card_details_json.get("messageId")
     card_person_id=card_details_json.get("personId")
     print(f'person {card_person_id} selected this option {user_selected_option} , {main_feature} and the message id for the card is {card_message_id}')
@@ -258,7 +252,7 @@ def attachnotify():
         elif user_selected_option=="Call Recording":
             call_recording_section(card_person_id=card_person_id,user_selected_option=user_selected_option,main_feature=main_feature,card_message_id=card_message_id)
         else:
-            prompt_admin_section(card_person_id=card_person_id,user_selected_option=user_selected_option,user_action=user_action,card_message_id=card_message_id,prompt=new_prompt,current_global_variable=Current_global_variable)
+            prompt_admin_section(card_person_id=card_person_id,user_selected_option=user_selected_option,user_action=user_action,card_message_id=card_message_id,prompt=new_prompt,current_global_variable=Current_global_variable,global_variable_id=Current_global_variable_id)
     else:
         if main_feature=="Agent Stats":
             agent_stats_section(card_person_id=card_person_id,user_selected_option=user_selected_option,main_feature=main_feature,card_message_id=card_message_id)
@@ -268,7 +262,7 @@ def attachnotify():
         elif user_selected_option=="Call Recording":
             call_recording_section(card_person_id=card_person_id,user_selected_option=user_selected_option,main_feature=main_feature,card_message_id=card_message_id)
         else:
-            prompt_admin_section(card_person_id=card_person_id,user_selected_option=user_selected_option,user_action=user_action,card_message_id=card_message_id,prompt=new_prompt,current_global_variable=Current_global_variable)
+            prompt_admin_section(card_person_id=card_person_id,user_selected_option=user_selected_option,user_action=user_action,card_message_id=card_message_id,prompt=new_prompt,current_global_variable=Current_global_variable,global_variable_id=Current_global_variable_id)
 
 
 
