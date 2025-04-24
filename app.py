@@ -189,7 +189,7 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
                 message_delete_status_code=delete_webex_message(message_id=card_message_id)
                 print("Card deleted from webex successfully with code",message_delete_status_code)
                 uso_cmpt_info=global_variable_dict.get(user_selected_option, {})
-                global_variable_id=uso_cmpt_info("id")
+                global_variable_id=uso_cmpt_info.get("id")
                 default_global_variable_value=uso_cmpt_info.get("defaultValue")
                 print(uso_cmpt_info)
                 print(global_variable_id)
