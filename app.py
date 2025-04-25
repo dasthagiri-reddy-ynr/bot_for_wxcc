@@ -117,6 +117,7 @@ def choices_for_send_card(choice_list):
 def agent_stats_section(card_person_id,user_selected_option,main_feature,card_message_id):
         message_text=f' 🛠️ {user_selected_option} Feature is still under development 🛠️'
         send_webex_message(person_id=card_person_id,text=message_text)
+        users_with_pending_cards.remove(card_person_id)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         print(message_delete_status_code)
         return "webhook received",200
@@ -125,6 +126,7 @@ def agent_stats_section(card_person_id,user_selected_option,main_feature,card_me
 def business_hours_section(card_person_id,user_selected_option,main_feature,card_message_id):
         message_text=f' 🛠️ {user_selected_option} Feature is still under development 🛠️'
         send_webex_message(person_id=card_person_id,text=message_text)
+        users_with_pending_cards.remove(card_person_id)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         print(message_delete_status_code)
         return "webhook received",200
@@ -133,6 +135,7 @@ def business_hours_section(card_person_id,user_selected_option,main_feature,card
 def call_recording_section(card_person_id,user_selected_option,main_feature,card_message_id):
         message_text=f' 🛠️ {user_selected_option} Feature is still under development 🛠️'
         send_webex_message(person_id=card_person_id,text=message_text)
+        users_with_pending_cards.remove(card_person_id)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         print(message_delete_status_code)
         return "webhook received",200
