@@ -259,23 +259,29 @@ def attachnotify():
     if main_feature=="This_is_first_card":
         if user_selected_option=="Agent Stats":
             agent_stats_section(card_person_id=card_person_id,user_selected_option=user_selected_option,main_feature=main_feature,card_message_id=card_message_id)
+            return "Feature still under development",200
         elif user_selected_option=="Business Hours":
             business_hours_section(card_person_id=card_person_id,user_selected_option=user_selected_option,main_feature=main_feature,card_message_id=card_message_id)
-            return "webhook received",200
+            return "Feature still under development",200
         elif user_selected_option=="Call Recording":
             call_recording_section(card_person_id=card_person_id,user_selected_option=user_selected_option,main_feature=main_feature,card_message_id=card_message_id)
+            return "Feature still under development",200
         else:
             prompt_admin_section(card_person_id=card_person_id,user_selected_option=user_selected_option,user_action=user_action,card_message_id=card_message_id,prompt=new_prompt,current_global_variable=Current_global_variable,global_variable_id=Current_global_variable_id)
+            return "webhook received",200
     else:
         if main_feature=="Agent Stats":
             agent_stats_section(card_person_id=card_person_id,user_selected_option=user_selected_option,main_feature=main_feature,card_message_id=card_message_id)
+            return "Feature still under development",200
         elif main_feature=="Business Hours":
             business_hours_section(card_person_id=card_person_id,user_selected_option=user_selected_option,main_feature=main_feature,card_message_id=card_message_id)
-            return "webhook received",200
+            return "Feature still under development",200
         elif user_selected_option=="Call Recording":
             call_recording_section(card_person_id=card_person_id,user_selected_option=user_selected_option,main_feature=main_feature,card_message_id=card_message_id)
+            return "Feature still under development",200
         else:
             prompt_admin_section(card_person_id=card_person_id,user_selected_option=user_selected_option,user_action=user_action,card_message_id=card_message_id,prompt=new_prompt,current_global_variable=Current_global_variable,global_variable_id=Current_global_variable_id)
+            return "webhook received",200
 # --- Optional: Index Route ---
 @app.route('/')
 def index():
