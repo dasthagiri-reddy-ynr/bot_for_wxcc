@@ -2,6 +2,8 @@ from flask import Flask, request, jsonify
 import requests
 import json
 import copy
+from validator import validate_user_input_with_details
+
 
 app = Flask(__name__)
 
@@ -149,6 +151,22 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         return "webhook received",200
     elif user_action=="update":
+        is_valid,validated_text=validate_user_input_with_details(prompt)
+        if is_valid:
+            default_global_variable_value=prompt
+            print("The global Variable ID is :",global_variable_id)
+            message_text=f" ✅ Your {current_global_variable} updated successfully with this Message: {prompt}. \n Thank you for using the Bot, For feedback and suggestions mail: ITUnifiedCommunications@rsmus.com "
+            send_webex_message(person_id=card_person_id,text=message_text)
+            users_with_pending_cards.remove(card_person_id)
+            message_delete_status_code=delete_webex_message(message_id=card_message_id)
+            return "webhook received",200
+        else:
+            message_text=validated_text
+            send_webex_message(person_id=card_person_id,text=message_text)
+            users_with_pending_cards.remove(card_person_id)
+            message_delete_status_code=delete_webex_message(message_id=card_message_id)
+            return "webhook received",200
+        '''
         if prompt and prompt.strip():
             default_global_variable_value=prompt
             print("The global Variable ID is :",global_variable_id)
@@ -163,6 +181,7 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
             users_with_pending_cards.remove(card_person_id)
             message_delete_status_code=delete_webex_message(message_id=card_message_id)
             return "webhook received",200
+            '''
     else:
         if user_selected_option=="Prompt Admin":
             message_text=f'✅ The Option you selected is: {user_selected_option} '
