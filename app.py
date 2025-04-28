@@ -3,6 +3,7 @@ import requests
 import json
 import copy
 from validator import validate_user_input_with_details
+from access_control_list_code import dict_for_access_control
 
 
 app = Flask(__name__)
@@ -14,7 +15,8 @@ org_id='f9b4fa9e-1e82-4caf-8be6-92b8011cc1aa' # enter correct org_id
 bot_person_id='Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jODI5NTY3NS0zYTk2LTQ0ZGQtODBiMC1hYWMzM2MwYmZiOTA'
 all_features=["Prompt Admin","Agent Stats","Business Hours","Call Recording"]
 users_with_pending_cards_file="users_with_pending_cards.json"
-
+profiletype_useremail_dict=dict_for_access_control(wxcc_token,org_id)
+print(profiletype_useremail_dict)
 # --- Functions to read and update the pending cards file ---
 def load_users_list_from_pending_cards_file():
     with open(users_with_pending_cards_file,'r') as f:
@@ -234,10 +236,10 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
                 return "webhook received",200
             else:
                 return "webhook received",200
-# --- Message Webhook Endpoint ---
 
 # --- this loads the users with pending card list at start ---
 users_with_pending_cards=load_users_list_from_pending_cards_file()
+# --- Message Webhook Endpoint ---
 @app.route('/webhook', methods=['POST'])
 def webhook():
     received_payload=request.json
