@@ -13,6 +13,7 @@ WEBEX_BOT_TOKEN = 'Bearer MTM3OTkxYWUtNzgwYS00MDg1LWE2ZTktZDAzMzkzYTk1NGY0YzM2MD
 wxcc_token='Bearer MmM5NDQxMTktOGY1Zi00ZDMzLWExZTQtNTNkMjUzZjcyZTE2MWI5YzRlOGMtNmI3_PF84_f9b4fa9e-1e82-4caf-8be6-92b8011cc1aa'  # Replace with your real token
 org_id='f9b4fa9e-1e82-4caf-8be6-92b8011cc1aa' # enter correct org_id
 bot_person_id='Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jODI5NTY3NS0zYTk2LTQ0ZGQtODBiMC1hYWMzM2MwYmZiOTA'
+bot_email="Wxcc_testing@webex.bot"
 all_features=["Prompt Admin","Agent Stats","Business Hours","Call Recording"]
 users_with_pending_cards_file="users_with_pending_cards.json"
 profiletype_useremail_dict=dict_for_access_control(wxcc_token,org_id)
@@ -239,6 +240,8 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
 
 # --- this loads the users with pending card list at start ---
 users_with_pending_cards=load_users_list_from_pending_cards_file()
+users_with_access_to_bot=set(email for emails in profiletype_useremail_dict.values() for email in emails)
+print(users_with_access_to_bot)
 # --- Message Webhook Endpoint ---
 @app.route('/webhook', methods=['POST'])
 def webhook():
@@ -249,6 +252,29 @@ def webhook():
     print(person_email)
     print(person_id)
     message_id=received_payload.get("data",{}).get("id")
+
+    if person_email==bot_email:
+        print("ignoring bot message webhook notifications")
+        return "ignored bot message", 200
+    if person_email not in users_with_access_to_bot:
+        text ="🚫 Unauthorized access. ⚠️ Entry will be logged "
+        send_webex_message(person_id=person_id,text=text)
+        return "User has pending cards",403
+    if person_id in users_with_pending_cards:
+        text = "⚠️ You have an incomplete request. Please complete the previous step before starting a new one."
+        send_webex_message(person_id=person_id,text=text)
+        return "User has pending cards",200
+    json_file="base_card.json"
+    first_card_choices=choices_for_send_card(choice_list=all_features)
+    base_card_copy=load_card_from_file(json_file=json_file)
+    first_card=copy.deepcopy(base_card_copy)
+    first_card["content"]["body"][2]["choices"] = first_card_choices
+    first_card["content"]["actions"][0]["data"]["main_feature"] = "This_is_first_card"
+    card_to_bot(card_person_id=person_id,token=WEBEX_BOT_TOKEN,card_content=first_card)
+    users_with_pending_cards.append(person_id)
+    update_users_with_pending_cards_file(person_ids_list=users_with_pending_cards)
+    return "sent First card to user",200
+
     if person_id==bot_person_id:
         print("ignoring bot message webhook notifications")
         return "ignored bot message", 200
