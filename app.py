@@ -13,7 +13,21 @@ wxcc_token='Bearer MmM5NDQxMTktOGY1Zi00ZDMzLWExZTQtNTNkMjUzZjcyZTE2MWI5YzRlOGMtN
 org_id='f9b4fa9e-1e82-4caf-8be6-92b8011cc1aa' # enter correct org_id
 bot_person_id='Y2lzY29zcGFyazovL3VzL1BFT1BMRS9jODI5NTY3NS0zYTk2LTQ0ZGQtODBiMC1hYWMzM2MwYmZiOTA'
 all_features=["Prompt Admin","Agent Stats","Business Hours","Call Recording"]
-users_with_pending_cards = []
+users_with_pending_cards_file="users_with_pending_cards.json"
+
+# --- Functions to read and update the pending cards file ---
+def load_users_list_from_pending_cards_file():
+    with open(users_with_pending_cards_file,'r') as f:
+        content=f.read()
+        if content.strip():
+            person_ids_list=json.loads(content)
+        else:
+            person_ids_list=[]
+    return person_ids_list
+
+def update_users_with_pending_cards_file(person_ids_list):
+    with open(users_with_pending_cards_file,"w") as f:
+        json.dump(person_ids_list,f)
 
 # --- Json content from json file ---
 def load_card_from_file(json_file):
@@ -148,6 +162,7 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
         message_text="✅ Thank you for using the Bot, For Feedback and suggestions mail to ITUnifiedCommunications@rsmus.com "
         send_webex_message(person_id=card_person_id,text=message_text)
         users_with_pending_cards.remove(card_person_id)
+        update_users_with_pending_cards_file(users_with_pending_cards)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         return "webhook received",200
     elif user_action=="update":
@@ -158,6 +173,7 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
             message_text=f" ✅ Your {current_global_variable} updated successfully with this Message: {prompt}. \n Thank you for using the Bot, For feedback and suggestions mail: ITUnifiedCommunications@rsmus.com "
             send_webex_message(person_id=card_person_id,text=message_text)
             users_with_pending_cards.remove(card_person_id)
+            update_users_with_pending_cards_file(users_with_pending_cards)
             message_delete_status_code=delete_webex_message(message_id=card_message_id)
             return "webhook received",200
         else:
@@ -232,6 +248,9 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
             else:
                 return "webhook received",200
 # --- Message Webhook Endpoint ---
+
+# --- this loads the users with pending card list at start ---
+users_with_pending_cards=load_users_list_from_pending_cards_file()
 @app.route('/webhook', methods=['POST'])
 def webhook():
     received_payload=request.json
@@ -257,6 +276,7 @@ def webhook():
         first_card["content"]["actions"][0]["data"]["main_feature"] = "This_is_first_card"
         card_to_bot(card_person_id=person_id,token=WEBEX_BOT_TOKEN,card_content=first_card)
         users_with_pending_cards.append(person_id)
+        update_users_with_pending_cards_file(person_ids_list=users_with_pending_cards)
         return "webhook received",200
 # --- Attachment webhook notification ---
 @app.route('/attachnotify', methods=['POST'])
