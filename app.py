@@ -134,6 +134,7 @@ def agent_stats_section(card_person_id,user_selected_option,main_feature,card_me
         message_text=f' 🛠️ {user_selected_option} Feature is still under development 🛠️'
         send_webex_message(person_id=card_person_id,text=message_text)
         users_with_pending_cards.remove(card_person_id)
+        update_users_with_pending_cards_file(users_with_pending_cards)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         print(message_delete_status_code)
         return "webhook received",200
@@ -143,6 +144,7 @@ def business_hours_section(card_person_id,user_selected_option,main_feature,card
         message_text=f' 🛠️ {user_selected_option} Feature is still under development 🛠️'
         send_webex_message(person_id=card_person_id,text=message_text)
         users_with_pending_cards.remove(card_person_id)
+        update_users_with_pending_cards_file(users_with_pending_cards)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         print(message_delete_status_code)
         return "webhook received",200
@@ -152,6 +154,7 @@ def call_recording_section(card_person_id,user_selected_option,main_feature,card
         message_text=f' 🛠️ {user_selected_option} Feature is still under development 🛠️'
         send_webex_message(person_id=card_person_id,text=message_text)
         users_with_pending_cards.remove(card_person_id)
+        update_users_with_pending_cards_file(users_with_pending_cards)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         print(message_delete_status_code)
         return "webhook received",200
@@ -182,22 +185,6 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
             users_with_pending_cards.remove(card_person_id)
             message_delete_status_code=delete_webex_message(message_id=card_message_id)
             return "webhook received",200
-        '''
-        if prompt and prompt.strip():
-            default_global_variable_value=prompt
-            print("The global Variable ID is :",global_variable_id)
-            message_text=f" ✅ Your {current_global_variable} updated successfully with this Message: {prompt}. \n Thank you for using the Bot, For feedback and suggestions mail: ITUnifiedCommunications@rsmus.com "
-            send_webex_message(person_id=card_person_id,text=message_text)
-            users_with_pending_cards.remove(card_person_id)
-            message_delete_status_code=delete_webex_message(message_id=card_message_id)
-            return "webhook received",200
-        else:
-            message_text="❌ Sorry You selected Update without entering the new message \n Thank you for using the Bot, For feedback and suggestions to mail: ITUnifiedCommunications@rsmus.com "
-            send_webex_message(person_id=card_person_id,text=message_text)
-            users_with_pending_cards.remove(card_person_id)
-            message_delete_status_code=delete_webex_message(message_id=card_message_id)
-            return "webhook received",200
-            '''
     else:
         if user_selected_option=="Prompt Admin":
             message_text=f'✅ The Option you selected is: {user_selected_option} '
