@@ -167,9 +167,9 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
     if user_action=="exit":
         message_text="✅ Thank you for using the Bot, For Feedback and suggestions mail to ITUnifiedCommunications@rsmus.com "
         send_webex_message(person_id=card_person_id,text=message_text)
+        message_delete_status_code=delete_webex_message(message_id=card_message_id)
         users_with_pending_cards.remove(card_person_id)
         update_users_with_pending_cards_file(users_with_pending_cards)
-        message_delete_status_code=delete_webex_message(message_id=card_message_id)
         return "webhook received",200
     elif user_action=="update":
         is_valid,validated_text=validate_user_input_with_details(prompt)
@@ -178,14 +178,15 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
             print("The global Variable ID is :",global_variable_id)
             message_text=f" ✅ Your {current_global_variable} updated successfully with this Message: {prompt}. \n Thank you for using the Bot, For feedback and suggestions mail: ITUnifiedCommunications@rsmus.com "
             send_webex_message(person_id=card_person_id,text=message_text)
+            message_delete_status_code=delete_webex_message(message_id=card_message_id)
             users_with_pending_cards.remove(card_person_id)
             update_users_with_pending_cards_file(users_with_pending_cards)
-            message_delete_status_code=delete_webex_message(message_id=card_message_id)
             return "webhook received",200
-        else:
+        if not is_valid:
             message_text=validated_text
             send_webex_message(person_id=card_person_id,text=message_text)
             users_with_pending_cards.remove(card_person_id)
+            update_users_with_pending_cards_file(users_with_pending_cards)
             message_delete_status_code=delete_webex_message(message_id=card_message_id)
             return "webhook received",200
     else:
