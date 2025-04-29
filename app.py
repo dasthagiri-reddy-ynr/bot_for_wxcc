@@ -274,25 +274,6 @@ def webhook():
     users_with_pending_cards.append(person_id)
     update_users_with_pending_cards_file(person_ids_list=users_with_pending_cards)
     return "sent First card to user",200
-
-    if person_id==bot_person_id:
-        print("ignoring bot message webhook notifications")
-        return "ignored bot message", 200
-    elif person_id in users_with_pending_cards:
-        text = "⚠️ You have an incomplete request. Please complete the previous step before starting a new one."
-        send_webex_message(person_id=person_id,text=text)
-        return "User has pending cards",200
-    else:
-        json_file="base_card.json"
-        first_card_choices=choices_for_send_card(choice_list=all_features)
-        base_card_copy=load_card_from_file(json_file=json_file)
-        first_card=copy.deepcopy(base_card_copy)
-        first_card["content"]["body"][2]["choices"] = first_card_choices
-        first_card["content"]["actions"][0]["data"]["main_feature"] = "This_is_first_card"
-        card_to_bot(card_person_id=person_id,token=WEBEX_BOT_TOKEN,card_content=first_card)
-        users_with_pending_cards.append(person_id)
-        update_users_with_pending_cards_file(person_ids_list=users_with_pending_cards)
-        return "webhook received",200
 # --- Attachment webhook notification ---
 @app.route('/attachnotify', methods=['POST'])
 def attachnotify():
@@ -336,6 +317,13 @@ def attachnotify():
         else:
             prompt_admin_section(card_person_id=card_person_id,user_selected_option=user_selected_option,user_action=user_action,card_message_id=card_message_id,prompt=new_prompt,current_global_variable=Current_global_variable,global_variable_id=Current_global_variable_id)
             return "webhook received",200
+
+@app.route('/viewuserswithpendingcards',methods=["GET"])
+def viewuserswithpendingcards():
+    with open(users_with_pending_cards,'r') as f:
+        content=f.read
+        return json.loads(content)
+
 # --- Optional: Index Route ---
 @app.route('/')
 def index():
