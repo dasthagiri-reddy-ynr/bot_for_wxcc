@@ -112,5 +112,21 @@ else usv not in all_feature:
       else: usv is update:
             will plan this next time
 
+requirement---- display the prompt which belongs to only that team , for admin all the prompts 
 
-            
+ideas: --- from global variables we can use description to determine the team..
+
+need to work:
+
+from user end we need to identify the team they belong to ...
+
+for access control I am palnning to use user_profile api to determine who the user is [admin,supervisor,agent]
+
+so when sends a msg ... i need to get user mail address after that ---send api request to wxcc get the user  profile_id for that email_id
+
+send another api request to wxcc user profile and check the profile type for the profile_id ... 
+if its supervisor then we need to check the team which this supervisor belongs to 
+if its admin just give the entire list ... current logic will work for the admin ...
+if its agent decline access to it ...
+
+now the only thing i am unsure about is how to get the user team 
