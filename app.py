@@ -247,8 +247,6 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
                 return "webhook received",200
             return "webhook received",200
 
-# --- this loads the users with pending card list at start ---
-users_with_pending_cards=load_users_list_from_pending_cards_file()
 users_with_access_to_bot=set(email for emails in profiletype_useremail_dict.values() for email in emails)
 print(users_with_access_to_bot)
 # --- Message Webhook Endpoint ---
@@ -261,10 +259,10 @@ def webhook():
     print(person_email)
     print(person_id)
     message_id=received_payload.get("data",{}).get("id")
-
     if person_email==bot_email:
         print("ignoring bot message webhook notifications")
         return "ignored bot message", 200
+    users_with_pending_cards=load_users_list_from_pending_cards_file()
     if person_email not in users_with_access_to_bot:
         text ="🚫 Unauthorized access. ⚠️ Entry will be logged "
         send_webex_message(person_id=person_id,text=text)
