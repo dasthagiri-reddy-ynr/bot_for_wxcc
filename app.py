@@ -18,6 +18,20 @@ all_features=["Prompt Admin","Agent Stats","Business Hours","Call Recording"]
 users_with_pending_cards_file="users_with_pending_cards.json"
 profiletype_useremail_dict=dict_for_access_control(wxcc_token,org_id)
 print(profiletype_useremail_dict)
+
+# --- Function to remove the user from the pending cards list safely---
+def remove_user_from_pending_cards_list(person_id):
+    try:
+        users_with_pending_cards = load_users_list_from_pending_cards_file()
+        if person_id in users_with_pending_cards:
+            users_with_pending_cards.remove(person_id)
+            update_users_with_pending_cards_file(users_with_pending_cards)
+            print(f"User {person_id} removed from pending cards list.")
+        else:
+            print(f"User {person_id} not found in pending cards list.")
+    except Exception as e:
+        print(f"Error removing user {person_id} from pending cards list: {e}")
+
 # --- Functions to read and update the pending cards file ---
 def load_users_list_from_pending_cards_file():
     with open(users_with_pending_cards_file,'r') as f:
@@ -136,30 +150,27 @@ def choices_for_send_card(choice_list):
 def agent_stats_section(card_person_id,user_selected_option,main_feature,card_message_id):
         message_text=f' 🛠️ {user_selected_option} Feature is still under development 🛠️'
         send_webex_message(person_id=card_person_id,text=message_text)
-        users_with_pending_cards.remove(card_person_id)
-        update_users_with_pending_cards_file(users_with_pending_cards)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         print(message_delete_status_code)
+        remove_user_from_pending_cards_list(card_person_id)
         return "webhook received",200
 
 # --- Business Hours section function ---
 def business_hours_section(card_person_id,user_selected_option,main_feature,card_message_id):
         message_text=f' 🛠️ {user_selected_option} Feature is still under development 🛠️'
         send_webex_message(person_id=card_person_id,text=message_text)
-        users_with_pending_cards.remove(card_person_id)
-        update_users_with_pending_cards_file(users_with_pending_cards)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         print(message_delete_status_code)
+        remove_user_from_pending_cards_list(card_person_id)
         return "webhook received",200
 
 # --- Call Recording section function ---
 def call_recording_section(card_person_id,user_selected_option,main_feature,card_message_id):
         message_text=f' 🛠️ {user_selected_option} Feature is still under development 🛠️'
         send_webex_message(person_id=card_person_id,text=message_text)
-        users_with_pending_cards.remove(card_person_id)
-        update_users_with_pending_cards_file(users_with_pending_cards)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
         print(message_delete_status_code)
+        remove_user_from_pending_cards_list(card_person_id)
         return "webhook received",200
 
 # --- Prompt Admin section function ---
@@ -168,8 +179,7 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
         message_text="✅ Thank you for using the Bot, For Feedback and suggestions mail to ITUnifiedCommunications@rsmus.com "
         send_webex_message(person_id=card_person_id,text=message_text)
         message_delete_status_code=delete_webex_message(message_id=card_message_id)
-        users_with_pending_cards.remove(card_person_id)
-        update_users_with_pending_cards_file(users_with_pending_cards)
+        remove_user_from_pending_cards_list(card_person_id)
         return "webhook received",200
     elif user_action=="update":
         is_valid,validated_text=validate_user_input_with_details(prompt)
@@ -179,15 +189,13 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
             message_text=f" ✅ Your {current_global_variable} updated successfully with this Message: {prompt}. \n Thank you for using the Bot, For feedback and suggestions mail: ITUnifiedCommunications@rsmus.com "
             send_webex_message(person_id=card_person_id,text=message_text)
             message_delete_status_code=delete_webex_message(message_id=card_message_id)
-            users_with_pending_cards.remove(card_person_id)
-            update_users_with_pending_cards_file(users_with_pending_cards)
+            remove_user_from_pending_cards_list(card_person_id)
             return "webhook received",200
         if not is_valid:
             message_text=validated_text
             send_webex_message(person_id=card_person_id,text=message_text)
-            users_with_pending_cards.remove(card_person_id)
-            update_users_with_pending_cards_file(users_with_pending_cards)
             message_delete_status_code=delete_webex_message(message_id=card_message_id)
+            remove_user_from_pending_cards_list(card_person_id)
             return "webhook received",200
     else:
         if user_selected_option=="Prompt Admin":
