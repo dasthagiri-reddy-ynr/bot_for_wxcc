@@ -320,7 +320,7 @@ def attachnotify():
 
 @app.route('/viewuserswithpendingcards',methods=["GET"])
 def viewuserswithpendingcards():
-    with open(users_with_pending_cards,'r') as f:
+    with open(users_with_pending_cards_file,'r') as f:
         content=f.read
         return json.loads(content)
 
