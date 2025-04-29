@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import requests
 import json
 import copy
+import datetime
 from validator import validate_user_input_with_details
 from access_control_list_code import dict_for_access_control
 
@@ -244,8 +245,7 @@ def prompt_admin_section(card_person_id,user_selected_option,user_action,card_me
                 third_card["content"]["actions"][1]["data"]["main_feature"] = "Prompt Admin"
                 card_to_bot(card_person_id=card_person_id,token=WEBEX_BOT_TOKEN,card_content=third_card)
                 return "webhook received",200
-            else:
-                return "webhook received",200
+            return "webhook received",200
 
 # --- this loads the users with pending card list at start ---
 users_with_pending_cards=load_users_list_from_pending_cards_file()
@@ -333,6 +333,11 @@ def viewuserswithpendingcards():
         content=f.read()
         return json.loads(content)
 
+# --- Ping ---
+@app.route('/ping')
+def ping():
+    print(f"[{datetime.datetime.now()}] Ping received")
+    return "OK", 200
 # --- Optional: Index Route ---
 @app.route('/')
 def index():
